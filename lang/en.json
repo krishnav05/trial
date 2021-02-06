@@ -1,0 +1,76 @@
+  {
+  
+    "cname":"Ajerrha",
+    "title" : "A platform that allows the customer to obtain a car according to the specifications and type he desires to rent it with ease way",
+   "boardingname":  "Application Goals",
+
+   "app_description1" : "A platform that allows the customer to obtain a car according to the specifications and type he desires to rent it with ease way",
+   "app_description2" : "Helps car owners rent their private cars and earn through it",
+   "app_description3" : "Assists those wishing to rent a car with easy steps",
+
+   "skip":"Skip",
+   "done":"Done",
+   "vehicles":"Vehicles",
+   "Available":"Available",
+   "To":"To",
+   "For":"From",
+   "fair":"Price",
+
+
+
+
+
+
+   "drawer_home" : "Home",
+   "drawer_booking" : "My Bookings",
+   "drawer_vehicles" : "My Vehicles",
+   "drawer_rent" : "My Rent",
+   "drawer_about" : "About us",
+   "drawer_send" : "Send us",
+   "drawer_sign_out" : "Sign out",
+   "drawer_sign_in" : "Sign in",
+   "drawer_language" : "Language",
+   "drawer_settings" : "Settings",
+   "drawer_help" : "Help",
+   "cd_vehicle_details" : "Vehicle Details",
+   "cd_kilos" : "kilos",
+   "cd_200km" : "200 km / day are allowed, and the price of an additional kilo is 1 riyal",
+   "cd_insurance_exp" : "Insurance expiry date",
+   "cd_booking_date" : "Booking Date",
+   "cd_sar" : "SAR",
+   "cd_choose_date_time" : "Choose Date and time",
+   "cd_date_time" : "Date and time",
+   "cd_book_now" : "Book Now",
+   "cd_valid_license" : "Check you have a valid driver license and you don’t have any unpaid penalty",
+   "hp_rented_out" : "Rented out",
+   "hp_available" : "Available",
+   "hp_from" : "From",
+   "hp_to" : "To",
+   "hp_search" : "Search",
+   "hp_vehicle" : "Vehicle",
+
+"car_name":"Lexus 2020 - White",
+"Insurance":"Insurance expired date 11 - 11 - 2021",
+"Map_text":"Lexus LS car specifications, clean, new and appropriate for private parties, enjoy driving and spending nice time.",
+"mileage":"mileage 123",
+"sar":"SAR 600",
+"cd_200":"cd_200km",
+
+"Login":"Login",
+"account":"Create New Account",
+"newaccount":"New Account",
+"Create account":"Create account",
+"valid":"I agree to all terms and conditions. Click here to view.",
+"Add vehicle":"Add vehicle",
+"My Vehicles":"My vehicles",
+"Arabic":"عربي",
+"English":"EN",
+"cancal":"Cancal Request",
+"cancal_reason":"Reason for cancellation",
+"Booking from":"Booking from",
+"Booking upto":"Booking upto",
+"date":"24 / 11 / 20 - 14 : 53",
+"sendus":"SendUs"
+
+
+  }

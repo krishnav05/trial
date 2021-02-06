@@ -1,0 +1,86 @@
+
+[
+   
+    {
+      "name": "Range Rover",
+      "price": "550 SAR per day",
+      "star": " 5.0 Rating",
+      "map":"Riyadh",
+      "avl": "Available",
+      "model":"2019",
+      "image":"assets/images/BMW.png"
+    },
+    {
+      "name": "Range Rover",
+      "price": "550 SAR per day",
+      "star": " 5.0 Rating",
+      "map":"Riyadh",
+      "avl": "Available",
+      "model":"2019",
+      "image":"assets/images/BMW.png"
+    },
+    {
+      "name": "Range Rover",
+      "price": "550 SAR per day",
+      "star": " 5.0 Rating",
+      "map":"Riyadh",
+      "avl": "Available",
+      "model":"2019",
+      "image":"assets/images/BMW.png"
+    },
+    {
+      "name": "Range Rover",
+      "price": "550 SAR per day",
+      "star": " 5.0 rating",
+      "map":"Riyadh",
+      "avl": "Available",
+      "model":"2019",
+      "image":"assets/images/BMW.png"
+    },
+    {
+      "name": "Range Rover",
+      "price": "550 SAR per day",
+      "star": " 5.0 rating",
+      "map":"Riyadh",
+      "avl": "Available",
+      "model":"2019",
+      "image":"assets/images/BMW.png"
+    },
+    {
+      "name": "رينج روفر",
+      "price": "550 صير في اليوم",
+      "star": " 5.0 تقييم",
+      "map":"مدينة الرياض",
+      "avl": "متاح",
+      "model":"2019",
+      "image":"assets/images/BMW.png"
+    },
+    {
+      "name": "رينج روفر",
+      "price": "550 صير في اليوم",
+      "star": " 5.0 تقييم",
+      "map":"مدينة الرياض",
+      "avl": "متاح",
+      "model":"2019",
+      "image":"assets/images/BMW.png"
+    },
+    {
+      "name": "رينج روفر",
+      "price": "550 صير في اليوم",
+      "star": " 5.0 تقييم",
+      "map":"مدينة الرياض",
+      "avl": "متاح",
+      "model":"2019",
+      "image":"assets/images/BMW.png"
+    },
+    {
+      "name": "رينج روفر",
+      "price": "550 صير في اليوم",
+      "star": " 5.0 تقييم",
+      "map":"مدينة الرياض",
+      "avl": "متاح",
+      "model":"2019",
+      "image":"assets/images/BMW.png"
+    }
+  ]
+   

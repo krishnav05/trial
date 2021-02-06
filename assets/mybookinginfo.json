@@ -1,0 +1,24 @@
+
+[
+   
+    {
+      "name": "Range Rover",
+      "price": "5500 SAR ",
+      "ownername": "Fahed Ahmed  ",
+      "status":"Completed",
+      "days": "7 days",
+      "bookingid":"22105MN",
+      "image":"assets/images/BMW.png"
+    },
+    {
+      "name": "Range Rover",
+      "price": "5500 SAR ",
+      "ownername": "FAhed ahmed ",
+      "status":" pending",
+      "days": "7 days",
+      "bookingid":"22105MN",
+      "image":"assets/images/BMW.png"
+    }
+    
+  ]
+   
