@@ -22,19 +22,20 @@ class _DrawersState extends State<Drawers> {
   bool tokencheck = false;
   String tokenchec;
   SharedPreferences prefs;
+
   getStringValuesSF() async {
     prefs = await SharedPreferences.getInstance();
     //Return String
-
+print(tokenchec);
     tokenchec = prefs.getString('value_key');
 
-    if (tokenchec=="") {
-      print("null"+tokenchec);
+    if (tokenchec == "") {
+      print("null" + tokenchec);
       setState(() {
         tokencheck = false;
       });
     } else {
-      print("else"+tokenchec);
+      print("else" + tokenchec);
       setState(() {
         tokencheck = true;
       });
@@ -69,32 +70,37 @@ class _DrawersState extends State<Drawers> {
                 SizedBox(
                   width: 0.04 * MediaQuery.of(context).size.width,
                 ),
-               tokencheck? Text(
-                  AppLocalizations.of(context).translate(
-                    'cname',
-                  ),
-                   textScaleFactor: 1,
-                  style: TextStyle(
-                      fontSize: ResponsiveFlutter.of(context).wp(6),
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Tajawal',
-                      color: Colors.white),
-                  ):FlatButton(
-                    onPressed: () {
-                    //    Navigator.push(
-                    // context,
-                    // MaterialPageRoute(builder: (context) => LoginUi()),
+                tokencheck
+                    ? Text(
+                        AppLocalizations.of(context).translate(
+                          'cname',
+                        ),
+                        textScaleFactor: 1,
+                        style: TextStyle(
+                            fontSize: ResponsiveFlutter.of(context).wp(6),
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Tajawal',
+                            color: Colors.white),
+                      )
+                    : FlatButton(
+                        onPressed: () {
+                          //    Navigator.push(
+                          // context,
+                          // MaterialPageRoute(builder: (context) => LoginUi()),
 
-                //  );
-                    },
-                    child: Text("Login / Signup",textScaleFactor: 1,style: TextStyle(color: Colors.white,
-                     fontWeight: FontWeight.w500,
-                      fontFamily: 'Tajawal',
-                      fontSize:  ResponsiveFlutter.of(context).fontSize(2),
-                    
-                    ),),
-                  )
-                  
+                          //  );
+                        },
+                        child: Text(
+                          "Login / Signup",
+                          textScaleFactor: 1,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Tajawal',
+                            fontSize: ResponsiveFlutter.of(context).fontSize(2),
+                          ),
+                        ),
+                      )
               ],
             ),
             decoration: BoxDecoration(
@@ -141,8 +147,8 @@ class _DrawersState extends State<Drawers> {
                 fontFamily: 'Tajawal'),
           ),
           onTap: () {
-                       Navigator.pop(context);
-            
+            Navigator.pop(context);
+
             tokencheck
                 ? Navigator.push(
                     context,
@@ -175,7 +181,7 @@ class _DrawersState extends State<Drawers> {
                 fontFamily: 'Tajawal'),
           ),
           onTap: () {
-                       Navigator.pop(context);
+            Navigator.pop(context);
 
             tokencheck
                 ? Navigator.push(
@@ -209,7 +215,7 @@ class _DrawersState extends State<Drawers> {
                 fontFamily: 'Tajawal'),
           ),
           onTap: () {
-                       Navigator.pop(context);
+            Navigator.pop(context);
 
             tokencheck
                 ? Navigator.push(
@@ -265,7 +271,7 @@ class _DrawersState extends State<Drawers> {
                 fontFamily: 'Tajawal'),
           ),
           onTap: () {
-                       Navigator.pop(context);
+            Navigator.pop(context);
 
             Navigator.push(
               context,
@@ -294,20 +300,24 @@ class _DrawersState extends State<Drawers> {
                         print("check" + tokenchange);
                         if (tokenchange == "true") {
                           setState(() {
-                      getStringValuesSF();
+                            getStringValuesSF();
                             prefs.setString('value_key', "");
                             tokencheck = false;
-                      
                           });
+                          //  setState(() {
+                          //   getStringValuesSF();
+                          //   prefs.setString('otpverify', "");
+                            
+                          // });
                         }
-                         Navigator.pop(context);
+                        Navigator.pop(context);
                       });
                     })
                 : InkWell(
                     child: Text(AppLocalizations.of(context)
                         .translate('drawer_sign_in')),
                     onTap: () {
-                       Navigator.pop(context);
+                      Navigator.pop(context);
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => LoginUi()),
@@ -339,7 +349,7 @@ class _DrawersState extends State<Drawers> {
 
                       // Text('EN'),textColor:Colors.white,
                       onPressed: () {
-                       Navigator.pop(context);
+                        Navigator.pop(context);
                         appLanguage.changeLanguage(Locale("en"));
                       }
                       // AppLang
@@ -362,7 +372,7 @@ class _DrawersState extends State<Drawers> {
                     ),
                     //Text('AR'),textColor:Colors.white ,
                     onPressed: () {
-                       Navigator.pop(context);
+                      Navigator.pop(context);
                       appLanguage.changeLanguage(Locale("ar"));
                     },
                   ),

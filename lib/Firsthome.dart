@@ -14,17 +14,15 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FirstHome extends StatefulWidget {
-  
   @override
   _FirstHomeState createState() => _FirstHomeState();
 }
 
 class _FirstHomeState extends State<FirstHome> {
-
-
   @override
   final df = new DateFormat('dd-MM-yyyy');
   DateTime _currentdate = DateTime.now();
+
   Future<Null> _datechange(BuildContext context) async {
     final DateTime _datechange = await showDatePicker(
         context: context,
@@ -36,10 +34,9 @@ class _FirstHomeState extends State<FirstHome> {
       setState(() {
         _currentdate = _datechange;
       });
-    }
-    else{
+    } else {
       setState(() {
-        _currentdate=_currentdate;
+        _currentdate = _currentdate;
       });
     }
   }
@@ -57,10 +54,9 @@ class _FirstHomeState extends State<FirstHome> {
       setState(() {
         _currentdate2 = _datechange2;
       });
-    }
-     else{
+    } else {
       setState(() {
-        _currentdate2=_currentdate2;
+        _currentdate2 = _currentdate2;
       });
     }
   }
@@ -73,7 +69,7 @@ class _FirstHomeState extends State<FirstHome> {
   void initState() {
     super.initState();
     _theme = Colors.black;
-  //getBoolValuesSF();
+    //getBoolValuesSF();
 
     _scrollController = ScrollController()
       ..addListener(() {
@@ -99,6 +95,7 @@ class _FirstHomeState extends State<FirstHome> {
     return _scrollController.hasClients &&
         _scrollController.offset > (250 - kToolbarHeight);
   }
+
 //   bool boolValues ;
 // getBoolValuesSF() async {
 //   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -109,7 +106,6 @@ class _FirstHomeState extends State<FirstHome> {
 // });
 //   //return boolValue;
 // }
-
 
   @override
   Widget build(BuildContext context) {
@@ -179,8 +175,7 @@ class _FirstHomeState extends State<FirstHome> {
                                   child: TextField(
                                     textAlignVertical: TextAlignVertical.bottom,
                                     style: TextStyle(
-                                        fontSize: 20.0,
-                                        color: Colors.black),
+                                        fontSize: 20.0, color: Colors.black),
                                     decoration: new InputDecoration(
                                       border: new OutlineInputBorder(
                                         borderRadius:
@@ -205,17 +200,18 @@ class _FirstHomeState extends State<FirstHome> {
                               Flexible(
                                 flex: 2,
                                 child: IconButton(
-                                    icon: SvgPicture.asset(
-                                      "assets/icon_svg/filter_list-24px.svg",
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () => Navigator.of(context).push(
-                                        PageRouteBuilder(
-                                            opaque: false,
-                                            pageBuilder:
-                                                (BuildContext context, _, __) =>
-                                                    SimpleCustomAlert())
-                                                    ,),),
+                                  icon: SvgPicture.asset(
+                                    "assets/icon_svg/filter_list-24px.svg",
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () => Navigator.of(context).push(
+                                    PageRouteBuilder(
+                                        opaque: false,
+                                        pageBuilder:
+                                            (BuildContext context, _, __) =>
+                                                SimpleCustomAlert()),
+                                  ),
+                                ),
 
                                 //Navigator.push(context, MaterialPageRoute(builder:(context)=>SimpleCustomAlert(),),),)
                               ),
@@ -251,15 +247,18 @@ class _FirstHomeState extends State<FirstHome> {
                                   ),
                                 ),
                               ),
-                               Flexible(
+                              Flexible(
                                 flex: 2,
                                 child: InkWell(
-                                child: Icon(Icons.date_range,color: Colors.white,),
-                                onTap:(){
-                                 _datechange(context);
-                                } ,
-                                
-                                ),),
+                                  child: Icon(
+                                    Icons.date_range,
+                                    color: Colors.white,
+                                  ),
+                                  onTap: () {
+                                    _datechange(context);
+                                  },
+                                ),
+                              ),
                               Flexible(
                                 flex: 5,
                                 child: GestureDetector(
@@ -288,16 +287,18 @@ class _FirstHomeState extends State<FirstHome> {
                               Flexible(
                                 flex: 2,
                                 child: InkWell(
-                                child: Icon(Icons.date_range,color: Colors.white,),
-                                onTap:(){
-                                  _datechange2(context);
-                                } ,
-                                
-                                ),),
+                                  child: Icon(
+                                    Icons.date_range,
+                                    color: Colors.white,
+                                  ),
+                                  onTap: () {
+                                    _datechange2(context);
+                                  },
+                                ),
+                              ),
                               Flexible(
                                 flex: 5,
-                                child: 
-                                GestureDetector(
+                                child: GestureDetector(
                                   child: Text(
                                     ' $_formatdate2',
                                     style: TextStyle(color: Colors.white),
@@ -307,13 +308,9 @@ class _FirstHomeState extends State<FirstHome> {
                                   },
                                 ),
                               ),
-                              
                             ],
-                            
                           ),
-                          
                         ],
-                        
                       ),
                     ),
                   ),
@@ -375,8 +372,8 @@ class _FirstHomeState extends State<FirstHome> {
                   child: Padding(
                     padding:
                         const EdgeInsets.only(left: 10.0, right: 10, top: 10),
-                  //  child: boolValues ? Carinfo():Takelocation(),
-                  child:Carinfo(),
+                    //  child: boolValues ? Carinfo():Takelocation(),
+                    child: Carinfo(),
                   ),
                 ),
               );

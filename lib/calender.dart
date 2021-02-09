@@ -2,8 +2,6 @@
 // import 'package:intl/intl.dart';
 // import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-
-
 // /// My app class to display the date range picker
 // class Calender extends StatefulWidget {
 //   @override

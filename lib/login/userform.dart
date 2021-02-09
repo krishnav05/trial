@@ -11,6 +11,7 @@ import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:Ajreeha/Dialog/Dialogmobilecheck.dart';
+
 class Userform extends StatefulWidget {
   @override
   _UserformState createState() => _UserformState();
@@ -22,10 +23,7 @@ class _UserformState extends State<Userform> {
   var photopath;
   String photo64;
 
-
-
-bool completeaccount =false; 
-
+  bool completeaccount = false;
 
   // ignore: non_constant_identifier_names
   void open_camera() async {
@@ -36,14 +34,13 @@ bool completeaccount =false;
     print(_img64);
     print("image");
     print(imagepath);
-      print("only extension"+photopath);
+   // print("only extension" + photopath);
 
     setState(() {
       _image = imagepath;
-      photopath = (imagepath.toString().split('/').last);
+     // photopath = (imagepath.toString().split('/').last);
       photo64 = _img64;
-      print("only extension"+photopath);
-
+   //   print("only extension" + photopath);
     });
   }
 
@@ -56,19 +53,19 @@ bool completeaccount =false;
     print(_img64);
     print("image");
     print(imagepath);
-      print("only extension outside"+photopath);
+  //  print("only extension outside" + photopath);
 
     setState(() {
       _image = imagepath;
-      photopath = (imagepath.toString().split('/').last);
+     // photopath = (imagepath.toString().split('/').last);
       photo64 = _img64;
-      print("only extension"+photopath);
+     // print("only extension" + photopath);
     });
   }
 
   bool validate = false;
   bool selected = false;
-  
+
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
   final TextEditingController namecontroller = TextEditingController();
   final TextEditingController mobilecontroller = TextEditingController();
@@ -80,10 +77,10 @@ bool completeaccount =false;
       TextEditingController();
 
   final TextEditingController controller = TextEditingController();
-  String initialCountry = 'SA';
-  PhoneNumber number = PhoneNumber(isoCode: 'SA');
+ // String initialCountry = 'SA';
+ // PhoneNumber number = PhoneNumber(isoCode: 'SA');
   var mobile_no = "";
-
+var save_mobile;
   @override
   void initState() {
     super.initState();
@@ -146,7 +143,7 @@ bool completeaccount =false;
     http.post(
       'https://ajerrha.com/api/check/mobile',
       body: jsonEncode({
-        'mobile':mobile_no,
+        'mobile': mobile_no,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -157,13 +154,11 @@ bool completeaccount =false;
       if (res["status"] == "success") {
         isregister = true;
         var route = new MaterialPageRoute(
-          builder: (BuildContext context) =>
-              Otp(mobileno: mobile_no),
+          builder: (BuildContext context) => Otp(mobileno: mobile_no),
         );
         Navigator.of(context).push(route);
-      }
-      else if(res["status"]=="error"){
- showAlertDialogerrormobilecheck(context);
+      } else if (res["status"] == "error") {
+        showAlertDialogerrormobilecheck(context);
       }
       print(mobilecontroller.text);
       print(response.body);
@@ -179,11 +174,13 @@ bool completeaccount =false;
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: completeaccount?  Text("Complete Account",
-            style:
-                TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2))):Text("Create Account",
-            style:
-                TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2))),
+        title: completeaccount
+            ? Text("Complete Account",
+                style: TextStyle(
+                    fontSize: ResponsiveFlutter.of(context).fontSize(2)))
+            : Text("Create Account",
+                style: TextStyle(
+                    fontSize: ResponsiveFlutter.of(context).fontSize(2))),
         flexibleSpace: Container(
             decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -253,11 +250,18 @@ bool completeaccount =false;
                       children: [
                         Column(
                           children: [
+                             completeaccount? Text(
+                              "Basic Information",
+                              style: TextStyle(
+                                  color: Color(0xffFF741A),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16),
+                            ):Container(color: Colors.white,),
                             // Text("Enter Mobile"),
                             Padding(
                                 padding: EdgeInsets.all(10),
                                 child: TextFormField(
-                                   enabled: completeaccount ? false : true,
+                                  enabled: completeaccount ? false : true,
                                   //  enabled: isregister?true:false,
                                   controller: namecontroller,
                                   validator: (val) {
@@ -275,17 +279,19 @@ bool completeaccount =false;
                               child: Container(
                                 height: 55,
                                 decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
+                                    borderRadius: BorderRadius.circular(5),
                                     border: Border.all(color: Colors.grey)),
                                 child: InternationalPhoneNumberInput(
-                                  
+                                //  isEnabled:completeaccount?false:true ,
                                   inputBorder: InputBorder.none,
-                                  
+                                  ignoreBlank: false,
+                                  autoValidateMode: AutovalidateMode.disabled,
                                   spaceBetweenSelectorAndTextField: 0,
                                   onInputChanged: (PhoneNumber number) {
-                                    print(number.phoneNumber);
                                     setState(() {
                                       mobile_no = number.phoneNumber;
+                                    print(number.phoneNumber);
+
                                     });
                                   },
                                   // onInputValidated: (bool value) {
@@ -295,138 +301,65 @@ bool completeaccount =false;
                                     selectorType:
                                         PhoneInputSelectorType.BOTTOM_SHEET,
                                   ),
-                                  ignoreBlank: false,
-                                  autoValidateMode: AutovalidateMode.disabled,
-                                  
-                                  selectorTextStyle:
-                                      TextStyle(color: Colors.black,fontSize: 15,),
-                                  initialValue: number ,
-                                  textFieldController: mobilecontroller,
+                                  selectorTextStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                  ),
+                                //  initialValue: number,
+                                  textFieldController:mobilecontroller,
                                   formatInput: false,
                                   keyboardType: TextInputType.numberWithOptions(
                                       signed: true, decimal: true),
-                                  // inputBorder: OutlineInputBorder(),
                                   onSaved: (PhoneNumber number) {
-                                    print('On Saved: $number');
+                                    
                                   },
-                                   
-
                                 ),
                               ),
                             ),
-                            Padding(
+                       isregister?     Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: SizedBox(
                                 width: _width,
                                 child: FlatButton(
-                                            color: isregister
-                                                ? Colors.grey
-                                                : Color(0xffFF741A),
-                                            child: Text(
-                                              "Verify",
-                                              style: TextStyle(color: Colors.white),
-                                            ),
-                                            onPressed: () => _verifyOtp(),
-                                          ),
+                                  color: Colors.grey,
+                                  child: Text(
+                                    "Verify",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  onPressed: (){}
+                                ),
+                              ),
+                            ):  Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                width: _width,
+                                child: FlatButton(
+                                  color: 
+                                       Color(0xffFF741A),
+                                  child: Text(
+                                    "Verify",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  onPressed: () => _verifyOtp(),
+                                ),
                               ),
                             ),
-                        completeaccount?    Padding(
-                                padding: EdgeInsets.all(10),
-                                child: TextFormField(
-                                  
-                                  readOnly: true,
-                                  controller: dobcontroller,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Date of Birth',
-                                    hintText: '14 - 11 - 1985',
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        Icons.date_range,
-                                        color: Color(0xff00BAF2),
-                                      ),
-                                      onPressed: () {
-                                        showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(1949, 1),
-                                            lastDate: DateTime.now(),
-                                            builder: (BuildContext context,
-                                                Widget picker) {
-                                              return Theme(
-                                                data: ThemeData.dark().copyWith(
-                                                  colorScheme: ColorScheme.dark(
-                                                    primary: Colors.blue,
-                                                    onPrimary: Colors.white,
-                                                    surface: Colors.blue,
-                                                    onSurface: Colors.black,
-                                                  ),
-                                                  dialogBackgroundColor:
-                                                      Colors.white,
-                                                ),
-                                                child: picker,
-                                              );
-                                            }).then((selectedDate) {
-                                          if (selectedDate != null) {
-                                            dobcontroller.text = selectedDate
-                                                .toString()
-                                                .substring(0, 10);
-                                          } else {
-                                            dobcontroller.text = null;
-                                          }
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                )):Container(color: Colors.white,),
-                         completeaccount?   Padding(
-                                padding: EdgeInsets.all(10),
-                                child: TextFormField(
-                                 
-                                  controller: emailcontroller,
-                                  validator: validateEmail,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Email',
-                                      hintText: 'Syeedd777@hotmail.com'),
-                                )):Container(color: Colors.white,),
-                           completeaccount?  Padding(
-                                padding: EdgeInsets.all(10),
-                                child: TextFormField(
-                                  
-                                  controller: idcontroller,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'ID',
-                                    hintText: '3677 2595 6999',
-                                  ),
-                                )):Container(color: Colors.white,),
-                            Padding(
+                             Padding(
                                 padding: EdgeInsets.all(10),
                                 child: TextFormField(
                                   enabled: completeaccount ? false : true,
                                   controller: passwordcontroller,
-                                  validator: (val) {
-                                    if (val.isEmpty) return 'Empty';
-                                    return null;
-                                  },
                                   obscureText: true,
                                   decoration: InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: 'Password',
                                       hintText: 'Password'),
                                 )),
-                          Padding(
+                            Padding(
                                 padding: EdgeInsets.all(10),
                                 child: TextFormField(
-                                 enabled: completeaccount ? false : true,
+                                  enabled: completeaccount ? false : true,
                                   controller: confirmpasswordcontroller,
-                                  validator: (val) {
-                                    if (val.isEmpty) return 'Empty';
-                                    if (val != passwordcontroller.text)
-                                      return 'Not Match';
-                                    return null;
-                                  },
                                   decoration: InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: 'confirm Password',
@@ -434,182 +367,314 @@ bool completeaccount =false;
                                 )),
                             //Image
 
-                        completeaccount?      Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Upload License images"),
-                                    SizedBox(height: 5),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          color: Colors.black12,
-                                          height: 100.0,
-                                          width: 210.0,
-                                          child: Center(
-                                            child: _image == null
-                                                ? Text("No image")
-                                                : Image.file(_image),
+                               completeaccount?   Text("Additional Information",
+                             style: TextStyle(
+                                  color: Color(0xffFF741A),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16),
+                            
+                            ):Container(color: Colors.white,),
+                            completeaccount
+                                ? Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: TextFormField(
+                                      readOnly: true,
+                                      controller: dobcontroller,
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        labelText: 'Date of Birth',
+                                        hintText: '14 - 11 - 1985',
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            Icons.date_range,
+                                            color: Color(0xff00BAF2),
                                           ),
+                                          onPressed: () {
+                                            showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime(1949, 1),
+                                                lastDate: DateTime.now(),
+                                                builder: (BuildContext context,
+                                                    Widget picker) {
+                                                  return Theme(
+                                                    data: ThemeData.dark()
+                                                        .copyWith(
+                                                      colorScheme:
+                                                          ColorScheme.dark(
+                                                        primary: Colors.blue,
+                                                        onPrimary: Colors.white,
+                                                        surface: Colors.blue,
+                                                        onSurface: Colors.black,
+                                                      ),
+                                                      dialogBackgroundColor:
+                                                          Colors.white,
+                                                    ),
+                                                    child: picker,
+                                                  );
+                                                }).then((selectedDate) {
+                                              if (selectedDate != null) {
+                                                dobcontroller.text =
+                                                    selectedDate
+                                                        .toString()
+                                                        .substring(0, 10);
+                                              } else {
+                                                dobcontroller.text = null;
+                                              }
+                                            });
+                                          },
                                         ),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: <Widget>[
-                                            FlatButton(
-                                              //  heroTag: "btn1",
-                                              onPressed: isregister
-                                                  ? open_camera
-                                                  : null,
-                                              // tooltip: "pickImage",
-                                              child: Icon(
-                                                Icons.add_a_photo,
-                                                color: Color(0xFF042E6F),
+                                      ),
+                                    ))
+                                : Container(
+                                    color: Colors.white,
+                                  ),
+                            completeaccount
+                                ? Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: TextFormField(
+                                      controller: emailcontroller,
+                                      validator: validateEmail,
+                                      decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Email',
+                                          hintText: 'Syeedd777@hotmail.com'),
+                                    ))
+                                : Container(
+                                    color: Colors.white,
+                                  ),
+                            completeaccount
+                                ? Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: TextFormField(
+                                      controller: idcontroller,
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        labelText: 'ID',
+                                        hintText: '3677 2595 6999',
+                                      ),
+                                    ))
+                                : Container(
+                                    color: Colors.white,
+                                  ),
+                           
+
+                      completeaccount?      Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text("Upload License images"),
+                                          SizedBox(height: 5),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                color: Colors.black12,
+                                                height: 100.0,
+                                                width: 210.0,
+                                                child: Center(
+                                                  child: _image == null
+                                                      ? Text("No image")
+                                                      : Image.file(_image),
+                                                ),
                                               ),
-                                            ),
-                                            FlatButton(
-                                              //  heroTag: "btn2",
-                                              onPressed: isregister
-                                                  ? open_gallery
-                                                  : null,
-                                              //  tooltip: "Pick Image",
-                                              child: Icon(
-                                                Icons.camera_alt,
-                                                color: Color(0xFF042E6F),
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                      ],
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: <Widget>[
+                                                  FlatButton(
+                                                    //  heroTag: "btn1",
+                                                    onPressed: open_camera,
+
+                                                    // tooltip: "pickImage",
+                                                    child: Icon(
+                                                      Icons.add_a_photo,
+                                                      color: Color(0xFF042E6F),
+                                                    ),
+                                                  ),
+                                                  FlatButton(
+                                                    //  heroTag: "btn2",
+                                                    onPressed: open_gallery,
+
+                                                    //  tooltip: "Pick Image",
+                                                    child: Icon(
+                                                      Icons.camera_alt,
+                                                      color: Color(0xFF042E6F),
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ):Container(color: Colors.white,),
-                          completeaccount?  ListTile(
-                              leading: CircularCheckBox(
-                                  value: this.selected,
-                                  checkColor: Colors.white,
-                                  activeColor: Color(0xffFF741A),
-                                  inactiveColor: Color(0xffFF741A),
-                                  disabledColor: Colors.grey,
-                                  onChanged: (val) => this.setState(() {
-                                        this.selected = !this.selected;
-                                      })),
-                              title: Text(
-                                AppLocalizations.of(context).translate(
-                                  'valid',
-                                ),
-                                style: TextStyle(
-                                    color: Color(0xffFF741A),
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Tajawal'),
-                              ),
-                              onTap: () => this.setState(() {
-                                this.selected = !this.selected;
-                              }),
-                            ):Container(color: Colors.white,),
+                                  ):Container(
+                                    color: Colors.white,
+                                  ),
+                                
+                            completeaccount
+                                ? ListTile(
+                                    leading: CircularCheckBox(
+                                        value: this.selected,
+                                        checkColor: Colors.white,
+                                        activeColor: Color(0xffFF741A),
+                                        inactiveColor: Color(0xffFF741A),
+                                        disabledColor: Colors.grey,
+                                        onChanged: (val) => this.setState(() {
+                                              this.selected = !this.selected;
+                                            })),
+                                    title: Text(
+                                      AppLocalizations.of(context).translate(
+                                        'valid',
+                                      ),
+                                      style: TextStyle(
+                                          color: Color(0xffFF741A),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Tajawal'),
+                                    ),
+                                    onTap: () => this.setState(() {
+                                      this.selected = !this.selected;
+                                    }),
+                                  )
+                                : Container(
+                                    color: Colors.white,
+                                  ),
                           ],
                         ),
-                    completeaccount?    Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: SizedBox(
-                            width: _width * 0.90,
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              onPressed: isregister
-                                  ? () async {
-                                      if (_form.currentState.validate()) {
-                                        http.post(
-                                          'https://ajerrha.com/api/register',
-                                          body: jsonEncode({
-                                            'name': namecontroller.text,
-                                            'email': emailcontroller.text,
-                                            'password': passwordcontroller.text,
-                                            'mobile': mobilecontroller.text,
-                                            'dob': dobcontroller.text,
-                                            'license_id': idcontroller.text,
-                                            'license_name': "image.jpg",
-                                            'image': photo64,
-                                            // "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGEAAAA8CAYAAAB2FtSKAAAAAXNSR0IArs4c6QAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAYaADAAQAAAABAAAAPAAAAADwvpT9AAAJNklEQVR4Ae2au24jyRWGJa8NA8YGBBzYjtR+gu19AvVmdmJwcwc9L2Bxn0C9oaPhZpupB36A4SQOzRrYuXoyZ+zFbrCAg+FkC2wgf3+xiiq2+sLmZSSKPMDPc61TVed0VzcpnZ09M7q7u/sz+C/4G/jkELb3i0NY5DprpOAD8A9i/wl+C34H/o0tgZ9o3xWg0Lr6fwSevtecKL8BV+Dv4A/7XsdR5qewuvpfgSr9EBYE5yfgL+BP4Neh7yRvWQEK+h9QRytNCKchOAK/DG2PLT+pxWxQjE/7jjk/Py/7jtl3/LN5MO+7UPvMf7RN4Ega7L"
-                                          }),
-                                          headers: {
-                                            'Content-Type': 'application/json',
-                                          },
-                                        ).then((response) {
-                                          final res =
-                                              json.decode(response.body);
-                                          print(res["status"]);
-                                          if (res["status"] == "success") {
-                                            isregister = true;
-                                            Navigator.pop(context);
-                                          } else {
-                                            isregister = false;
-                                            print(
-                                                "else" + isregister.toString());
+                        completeaccount
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: SizedBox(
+                                  width: _width * 0.90,
+                                  child: RaisedButton(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    onPressed: isregister
+                                        ? () async {
+                                            if (_form.currentState.validate()) {
+                                              print(save_mobile);
+                                              http.post(
+                                                'https://ajerrha.com/api/register',
+                                                body: jsonEncode({
+                                                  'name': namecontroller.text,
+                                                  'email': emailcontroller.text,
+                                                  'password':
+                                                      passwordcontroller.text,
+                                                  'mobile':save_mobile,
+                                                    
+                                                  'dob': dobcontroller.text,
+                                                  'license_id':
+                                                      idcontroller.text,
+                                                  'license_name': "image.jpg",
+                                                  'image': photo64,
+                                                  // "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGEAAAA8CAYAAAB2FtSKAAAAAXNSR0IArs4c6QAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAYaADAAQAAAABAAAAPAAAAADwvpT9AAAJNklEQVR4Ae2au24jyRWGJa8NA8YGBBzYjtR+gu19AvVmdmJwcwc9L2Bxn0C9oaPhZpupB36A4SQOzRrYuXoyZ+zFbrCAg+FkC2wgf3+xiiq2+sLmZSSKPMDPc61TVed0VzcpnZ09M7q7u/sz+C/4G/jkELb3i0NY5DprpOAD8A9i/wl+C34H/o0tgZ9o3xWg0Lr6fwSevtecKL8BV+Dv4A/7XsdR5qewuvpfgSr9EBYE5yfgL+BP4Neh7yRvWQEK+h9QRytNCKchOAK/DG2PLT+pxWxQjE/7jjk/Py/7jtl3/LN5MO+7UPvMf7RN4Ega7L"
+                                                }),
+                                                headers: {
+                                                  'Content-Type':
+                                                      'application/json',
+                                                },
+                                              ).then((response) {
+                                                final res =
+                                                    json.decode(response.body);
+                                                    print("body"+res);
+                                                print(res["status"]);
+                                                if (res["status"] ==
+                                                    "success") {
+                                                  isregister = true;
+
+                                                  Navigator.pop(context);
+                                                } else {
+                                                  isregister = false;
+                                                  print("else" +
+                                                      isregister.toString());
+                                                }
+                                                print(response.body);
+                                                print(isregister);
+                                              });
+                                            } else {
+                                              showAlertDialogerror(context);
+                                            }
                                           }
-                                          print(response.body);
-                                          print(isregister);
-                                        });
-                                      } else {
-                                        showAlertDialogerror(context);
-                                      }
-                                    }
-                                  : null,
-                              color: Color(0xFF042E6F),
-                              padding: EdgeInsets.all(16.0),
-                              textColor: Colors.white,
-                              child: Text(
-                                AppLocalizations.of(context).translate(
-                                  'Create account',
+                                        : null,
+                                    color: Color(0xFF042E6F),
+                                    padding: EdgeInsets.all(16.0),
+                                    textColor: Colors.white,
+                                    child: Text(
+                                      AppLocalizations.of(context).translate(
+                                        'Create account',
+                                      ),
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Tajawal'),
+                                    ),
+                                  ),
                                 ),
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Tajawal'),
+                              )
+                            : Container(
+                                color: Colors.white,
                               ),
-                            ),
-                          ),
-                        ):Container(color: Colors.white,),
-                     
-                 completeaccount? Container(color: Colors.white,):   FlatButton(child: Text("Submit",style: TextStyle(color: Colors.white),),
-                     color: Colors.blue,
-                     onPressed: (){
-                       setState(() {
-                         completeaccount=true;
-                       });
-                     },
-                     )
+                        completeaccount
+                            ? Container(
+                                color: Colors.white,
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: FlatButton(
+                                  child: Text(
+                                    "Submit",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  color: Colors.blue,
+                                 onPressed: () {
+                                   
+                                      setState(() {
+                                        completeaccount = true;
+                                        save_mobile=mobile_no;
+                                      });
+                                   
+                                  },
+                                ),
+                              )
                       ],
                     ),
-                  )
-                  ),
-                 
+                  )),
             ),
-            
           );
         },
       ),
     );
   }
+ showAlertDialogcompletesucessfull(BuildContext context) {
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Account SuccessFully Created "),
+      content: Text("Have a Good Day"),
+      actions: [
+        new FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            //   Navigator.of(context, rootNavigator: true)
+            //       .pop(); // dismisses only the dialog and returns nothing
+             },
+            child: new Text('OK'),
+          ),
+      ],
+    );
 
-  // void getPhoneNumber(String phoneNumber) async {
-  //   PhoneNumber number =
-  //       await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, 'US');
-
-  //   setState(() {
-  //     this.number = number;
-  //   });
-  // }
-
-  // @override
-  // void dispose() {
-  //   controller?.dispose();
-  //   super.dispose();
-  // }
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }

@@ -22,21 +22,24 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Align(
-        child: SvgPicture.asset('assets/images/$assetName.svg', width: 250 ,height: 250,),
-        alignment: Alignment.bottomCenter
-      ),
+          child: SvgPicture.asset(
+            'assets/images/$assetName.svg',
+            width: 250,
+            height: 250,
+          ),
+          alignment: Alignment.bottomCenter),
     );
   }
 
- 
-
   @override
   Widget build(BuildContext context) {
-   
     const bodyStyle = TextStyle(fontSize: 19.0);
     const pageDecoration = const PageDecoration(
-      titleTextStyle:
-       TextStyle(fontSize: 30.0, fontWeight: FontWeight.w900,color: Color(0Xff042E6F),fontFamily: 'Tajawal'),
+      titleTextStyle: TextStyle(
+          fontSize: 30.0,
+          fontWeight: FontWeight.w900,
+          color: Color(0Xff042E6F),
+          fontFamily: 'Tajawal'),
       bodyTextStyle: bodyStyle,
       descriptionPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
       pageColor: Colors.white,
@@ -47,10 +50,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       key: introKey,
       pages: [
         PageViewModel(
-          title:
-              AppLocalizations.of(context).translate('cname'),
+          title: AppLocalizations.of(context).translate('cname'),
           bodyWidget: MyList1(),
-         // AppLocalizations.of(context).translate('title'),
+          // AppLocalizations.of(context).translate('title'),
           image: _buildImage('boarding'),
           decoration: pageDecoration,
         ),
@@ -66,42 +68,49 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       skipFlex: 0,
       nextFlex: 0,
       skip: MyButton(),
-            //Text(AppLocalizations.of(context).translate('boardingname'),style: TextStyle(fontWeight: FontWeight.w600,fontFamily: 'Tajawal',fontSize: 18)),
-            next: const Icon(Icons.arrow_forward),
-            done: MyButton2(),
-            //const Text('Done', style: TextStyle(fontWeight: FontWeight.w600,fontFamily: 'Tajawal',fontSize: 18)),
-            dotsDecorator: const DotsDecorator(
-              size: Size(10.0, 10.0),
-              color: Color(0xFFBDBDBD),
-              activeSize: Size(22.0, 10.0),
-              activeShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(25.0)),
-              ),
-            ),
-          );
-        }
-      }
-      
-      class MyButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text(AppLocalizations.of(context).translate('skip'),style: TextStyle(fontWeight: FontWeight.w600,fontFamily: 'Tajawal',fontSize: 18),);
+      //Text(AppLocalizations.of(context).translate('boardingname'),style: TextStyle(fontWeight: FontWeight.w600,fontFamily: 'Tajawal',fontSize: 18)),
+      next: const Icon(Icons.arrow_forward),
+      done: MyButton2(),
+      //const Text('Done', style: TextStyle(fontWeight: FontWeight.w600,fontFamily: 'Tajawal',fontSize: 18)),
+      dotsDecorator: const DotsDecorator(
+        size: Size(10.0, 10.0),
+        color: Color(0xFFBDBDBD),
+        activeSize: Size(22.0, 10.0),
+        activeShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+        ),
+      ),
+    );
   }
-        
 }
-     class MyButton2 extends StatelessWidget {
+
+class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text(AppLocalizations.of(context).translate('done'),style: TextStyle(fontWeight: FontWeight.w600,fontFamily: 'Tajawal',fontSize: 18),);
+    return Text(
+      AppLocalizations.of(context).translate('skip'),
+      style: TextStyle(
+          fontWeight: FontWeight.w600, fontFamily: 'Tajawal', fontSize: 18),
+    );
   }
-        
+}
+
+class MyButton2 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      AppLocalizations.of(context).translate('done'),
+      style: TextStyle(
+          fontWeight: FontWeight.w600, fontFamily: 'Tajawal', fontSize: 18),
+    );
+  }
 }
 
 class MyList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
-  //  var appLanguage = Provider.of<AppLanguage>(context);
+    //  var appLanguage = Provider.of<AppLanguage>(context);
 
     return Padding(
       padding: const EdgeInsets.all(0),
@@ -115,19 +124,27 @@ class MyList extends StatelessWidget {
                 opacity: 0.54,
                 child: new Text(
                   AppLocalizations.of(context).translate('app_description2'),
-                 // textScaleFactor: 0.7,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,fontFamily: 'Tajawal'),
+                  // textScaleFactor: 0.7,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Tajawal'),
                 )),
           ),
           new ListTile(
             minLeadingWidth: 10,
-
             leading: new MyBullet(),
             title: Opacity(
                 opacity: 0.54,
-                child: Text(AppLocalizations.of(context).translate('app_description3',),
-                 // textScaleFactor: 0.6,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,fontFamily: 'Tajawal'),
+                child: Text(
+                  AppLocalizations.of(context).translate(
+                    'app_description3',
+                  ),
+                  // textScaleFactor: 0.6,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Tajawal'),
                 )),
           ),
           // new ListTile(
@@ -154,7 +171,6 @@ class MyList extends StatelessWidget {
           //         style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           //       )),
           // ),
-          
         ],
       ),
     );
@@ -175,26 +191,30 @@ class MyBullet extends StatelessWidget {
   }
 }
 
-class MyList1 extends StatelessWidget{
+class MyList1 extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     // ignore: unused_local_variable
-  //  var appLanguage = Provider.of<AppLanguage>(context);
-return Padding(
-   padding: const EdgeInsets.all(0),
-  child:Column(
-     children: <Widget>[
-          new ListTile(
-            minLeadingWidth: 10,
-            minVerticalPadding: 0,
-            title: Opacity(
-                opacity: 0.54,
-                child: new Text(
-                  AppLocalizations.of(context).translate('title'),textAlign: TextAlign.center,
-                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,fontFamily: 'Tajawal'),
-                ),),
-           ), ]
-
-  ),);
+    //  var appLanguage = Provider.of<AppLanguage>(context);
+    return Padding(
+      padding: const EdgeInsets.all(0),
+      child: Column(children: <Widget>[
+        new ListTile(
+          minLeadingWidth: 10,
+          minVerticalPadding: 0,
+          title: Opacity(
+            opacity: 0.54,
+            child: new Text(
+              AppLocalizations.of(context).translate('title'),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Tajawal'),
+            ),
+          ),
+        ),
+      ]),
+    );
   }
 }

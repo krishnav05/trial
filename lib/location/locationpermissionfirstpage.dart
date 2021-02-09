@@ -19,7 +19,6 @@
 //     requestLocationPermission();
 //     _gpsService();
 //   }
-  
 
 //   Future<bool> _requestPermission(PermissionGroup permission) async {
 //     final PermissionHandler _permissionHandler = PermissionHandler();
@@ -76,7 +75,7 @@
 //             });
 //       }
 //     }
-    
+
 //   }
 
 // /*Check if gps service is enabled or not*/
@@ -94,6 +93,5 @@
 //       body: checklocation ? Check() : requestLocationPermission(),
 //     );
 //   }
-  
-// }
 
+// }

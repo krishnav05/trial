@@ -9,6 +9,8 @@ import 'package:Ajreeha/localization/App_localization.dart';
 import 'package:Ajreeha/imageCoursel/detailpagecoursel.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'booking.dart';
 // ignore: camel_case_types
 class vehicleDetails extends StatefulWidget {
   @override
@@ -22,9 +24,25 @@ class _vehicleDetailsState extends State<vehicleDetails> {
   Color _theme;
   bool showtext = false;
 
+
+SharedPreferences prefs;
+String token;
+getValue() async {
+  prefs = await SharedPreferences.getInstance();
+  //Return String
+  token = prefs.getString('value_key');
+  return token;
+}
+
+
+
+
+
+
   @override
   void initState() {
     super.initState();
+    getValue();
     getCurrentLocation();
     _theme = Colors.black;
 
@@ -48,33 +66,36 @@ class _vehicleDetailsState extends State<vehicleDetails> {
           }
         }
       });
-       super.initState();
+    super.initState();
   }
 
   bool get _isAppBarExpanded {
     return _scrollController.hasClients &&
         _scrollController.offset > (150 - kToolbarHeight);
   }
- GoogleMapController _controller;
-Position position;
-Widget _child;
 
-void getCurrentLocation() async{
-  Position res =await Geolocator().getCurrentPosition();
-  setState(() {
-    position=res;
-    _child=mapWidget();
-  });
-}
-Set<Marker> _createMarker(){
-return<Marker>[
-  Marker(markerId: MarkerId("Home"),
-  position: LatLng(position.latitude,position.longitude),
-  icon: BitmapDescriptor.defaultMarker,
-  infoWindow: InfoWindow(title: "Home")
-  )
-].toSet();
-}
+  GoogleMapController _controller;
+  Position position;
+  Widget _child;
+
+  void getCurrentLocation() async {
+    Position res = await Geolocator().getCurrentPosition();
+    setState(() {
+      position = res;
+      _child = mapWidget();
+    });
+  }
+
+  Set<Marker> _createMarker() {
+    return <Marker>[
+      Marker(
+          markerId: MarkerId("Home"),
+          position: LatLng(position.latitude, position.longitude),
+          icon: BitmapDescriptor.defaultMarker,
+          infoWindow: InfoWindow(title: "Home"))
+    ].toSet();
+  }
+
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
@@ -318,8 +339,8 @@ return<Marker>[
                       Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         child: Container(
- height: _height/4,
-                        child: _child,
+                          height: _height / 4,
+                          child: _child,
 
                           // decoration: BoxDecoration(
                           //     borderRadius:
@@ -518,14 +539,21 @@ return<Marker>[
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: RaisedButton(
+                        child: 
+                        //selected? 
+                        RaisedButton(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
                           ),
-                          onPressed: () => Navigator.push(
+                          onPressed: () =>token==""? Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => LoginUi(),
+                            ),
+                          ): Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Booking(),
                             ),
                           ),
                           color: Color(0xFF042E6F),
@@ -544,7 +572,9 @@ return<Marker>[
                           //     textScaleFactor: 1.2,
                           //     style: TextStyle(
                           //         fontSize: 18, fontWeight: FontWeight.bold)),
-                        ),
+                        )
+                        // : 
+                        // showAlertDialogtermcheck(context),
                       ),
                       SizedBox(
                         height: 0.035 * _height,
@@ -557,17 +587,35 @@ return<Marker>[
       )),
     );
   }
-   Widget mapWidget(){
+
+  Widget mapWidget() {
     return GoogleMap(
-                      mapType: MapType.normal,
-                      markers:  _createMarker(),
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(position.latitude, position.longitude),
-                        zoom: 15.0,
-                      ),
-                      onMapCreated: (GoogleMapController controller) {
-                        _controller = controller;
-                      },
-                    );
+      mapType: MapType.normal,
+      markers: _createMarker(),
+      initialCameraPosition: CameraPosition(
+        target: LatLng(position.latitude, position.longitude),
+        zoom: 15.0,
+      ),
+      onMapCreated: (GoogleMapController controller) {
+        _controller = controller;
+      },
+    );
+  }
+   showAlertDialogtermcheck(BuildContext context) {
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("SuccessFull"),
+      content: Text("Have a Good Day"),
+      actions: [
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

@@ -46,7 +46,6 @@ class _DesignState extends State<Design> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
       body: NestedScrollView(
         controller: _scrollController,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -100,25 +99,10 @@ class _DesignState extends State<Design> {
           ];
         },
         body: (Text("new design")),
-        
-     
       ),
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import 'package:flutter/material.dart';
 // import 'package:Ajreeha/localization/Applocalization.dart';

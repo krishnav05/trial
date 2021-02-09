@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:android_intent/android_intent.dart';
 import 'package:geolocator/geolocator.dart';
+
 class Takelocation extends StatefulWidget {
   @override
   _TakelocationState createState() => _TakelocationState();
@@ -15,7 +16,6 @@ class _TakelocationState extends State<Takelocation> {
 //     requestLocationPermission();
 //     _gpsService();
 //   }
-  
 
 //   Future<bool> _requestPermission(PermissionGroup permission) async {
 //     final PermissionHandler _permissionHandler = PermissionHandler();
@@ -72,7 +72,7 @@ class _TakelocationState extends State<Takelocation> {
 //             });
 //       }
 //     }
-    
+
 //   }
 
 // /*Check if gps service is enabled or not*/
@@ -86,11 +86,11 @@ class _TakelocationState extends State<Takelocation> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(child: Text("Pls give permission for showing car list"),
-
-    onTap: (){
-    //  var status =  permissionHandler.checkPermissionStatus;
-    },
+    return InkWell(
+      child: Text("Pls give permission for showing car list"),
+      onTap: () {
+        //  var status =  permissionHandler.checkPermissionStatus;
+      },
     );
   }
 }

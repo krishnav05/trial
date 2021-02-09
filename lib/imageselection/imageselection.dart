@@ -12,6 +12,7 @@ class SingleImageUpload extends StatefulWidget {
 class _SingleImageUploadState extends State<SingleImageUpload> {
   List<Object> images = List<Object>();
   Future<File> _imageFile;
+
   @override
   void initState() {
     super.initState();
@@ -23,7 +24,7 @@ class _SingleImageUploadState extends State<SingleImageUpload> {
       //  images.add("Add Image");
       // images.add("Add Image");
       // images.add("Add Image");
-     // images.add("Add Image");
+      // images.add("Add Image");
     });
   }
 
@@ -41,7 +42,7 @@ class _SingleImageUploadState extends State<SingleImageUpload> {
         if (images[index] is ImageUploadModel) {
           ImageUploadModel uploadModel = images[index];
           return Card(
-           // clipBehavior: Clip.antiAlias,
+            // clipBehavior: Clip.antiAlias,
             child: Stack(
               children: <Widget>[
                 Image.file(
@@ -57,13 +58,17 @@ class _SingleImageUploadState extends State<SingleImageUpload> {
                       backgroundColor: Color(0xfffFF741A),
                       radius: 13,
                       child: IconButton(
-                       icon: Icon(Icons.delete_outline,size: 12,),
+                        icon: Icon(
+                          Icons.delete_outline,
+                          size: 12,
+                        ),
                         color: Colors.white,
-                        onPressed:() {
-                      setState(() {
-                        images.replaceRange(index, index + 1, ['Add Image']);
-                      });
-                    }, 
+                        onPressed: () {
+                          setState(() {
+                            images
+                                .replaceRange(index, index + 1, ['Add Image']);
+                          });
+                        },
                       ),
                     ),
                   ),
@@ -92,17 +97,17 @@ class _SingleImageUploadState extends State<SingleImageUpload> {
     setState(() {
       _imageFile = ImagePicker.pickImage(source: ImageSource.gallery);
       getFileImage(index);
-    //    final bytes = _imageFile.readAsBytesSync();
-    // String _img64 = base64Encode(bytes);
-    // print(_img64);
-    // print("image");
-    // print(imagepath);
-    // setState(() {
-    //   _image = imagepath;
-    //   photopath = imagepath.toString();
-    //   photo64 = _img64;
-    // });
-     });
+      //    final bytes = _imageFile.readAsBytesSync();
+      // String _img64 = base64Encode(bytes);
+      // print(_img64);
+      // print("image");
+      // print(imagepath);
+      // setState(() {
+      //   _image = imagepath;
+      //   photopath = imagepath.toString();
+      //   photo64 = _img64;
+      // });
+    });
   }
 
   void getFileImage(int index) async {

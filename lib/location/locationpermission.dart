@@ -13,12 +13,12 @@ class AskForPermission extends StatefulWidget {
 class _AskForPermissionState extends State<AskForPermission> {
   final PermissionHandler permissionHandler = PermissionHandler();
   Map<PermissionGroup, PermissionStatus> permissions;
+
   void initState() {
     super.initState();
     requestLocationPermission();
     _gpsService();
   }
-  
 
   Future<bool> _requestPermission(PermissionGroup permission) async {
     final PermissionHandler _permissionHandler = PermissionHandler();
@@ -29,19 +29,19 @@ class _AskForPermissionState extends State<AskForPermission> {
     return false;
   }
 
- // bool checklocation = false;
+  // bool checklocation = false;
 /*Checking if your App has been Given Permission*/
   Future<bool> requestLocationPermission({Function onPermissionDenied}) async {
     var granted = await _requestPermission(PermissionGroup.location);
     if (granted != true) {
       requestLocationPermission();
-       SharedPreferences prefs = await SharedPreferences.getInstance();
-       prefs.setBool("loccheck",false);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool("loccheck", false);
       // setState(() {
       //   checklocation = false;
-        
+
       // });
-    } 
+    }
 
     debugPrint('requestContactsPermission $granted');
     return granted;
@@ -74,7 +74,6 @@ class _AskForPermissionState extends State<AskForPermission> {
             });
       }
     }
-    
   }
 
 /*Check if gps service is enabled or not*/
@@ -88,10 +87,6 @@ class _AskForPermissionState extends State<AskForPermission> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body:  Check() 
-    );
+    return Scaffold(body: Check());
   }
-  
 }
-

@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Otp extends StatefulWidget {
   final String mobileno;
+
   Otp({Key key, this.mobileno}) : super(key: key);
+
   @override
   _OtpState createState() => _OtpState();
 }
@@ -16,14 +19,14 @@ class _OtpState extends State<Otp> {
   bool _isLoadingButton = false;
   bool _enableButton = false;
   String _otpCode = "";
-  bool resendbtncolor =false ;
+  bool resendbtncolor = false;
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     _getSignatureCode();
-  
   }
 
   /// get signature code
@@ -80,10 +83,14 @@ class _OtpState extends State<Otp> {
       headers: {
         'Content-Type': 'application/json',
       },
-    ).then((response) {
+    ).then((response) async {
       final res = json.decode(response.body);
       print(res["status"]);
+      // bool   isregister = false;
+
       if (res["status"] == "success") {
+        // var preferences = await SharedPreferences.getInstance(); // Save a value
+        // preferences.setString('otpverify', "true");
         Navigator.pop(context);
       }
       print(response.body);
@@ -91,9 +98,8 @@ class _OtpState extends State<Otp> {
     });
   }
 
- 
-_resend(){
-   http.post(
+  _resend() {
+    http.post(
       'https://ajerrha.com/api/resend/mobile',
       body: jsonEncode({
         'mobile': widget.mobileno,
@@ -106,20 +112,21 @@ _resend(){
       print(res["status"]);
       if (res["status"] == "success") {
         setState(() {
-           resendbtncolor =true;
+          resendbtncolor = true;
         });
       }
-      print("ResendCode"+response.body);
+      print("ResendCode" + response.body);
     });
-}
+  }
+
   @override
   Widget build(BuildContext context) {
-     final _width = MediaQuery.of(context).size.width;
+    final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
 
     return MaterialApp(
       home: Scaffold(
-         resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomPadding: false,
         key: _scaffoldKey,
         appBar: AppBar(
           title: const Text('Mobile Verify'),
@@ -131,11 +138,20 @@ _resend(){
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text("Verification",style: TextStyle(color: Color(0xffFF741A),fontSize: 40),),
-                 SizedBox(
+                Text(
+                  "Verification",
+                  style: TextStyle(color: Color(0xffFF741A), fontSize: 40),
+                ),
+                SizedBox(
                   height: 20,
                 ),
-                Text("Enter the 4 digit verification code you got on your phone",textAlign: TextAlign.center,style: TextStyle(fontSize: 20,),),
+                Text(
+                  "Enter the 4 digit verification code you got on your phone",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
                 SizedBox(
                   height: 20,
                 ),
@@ -144,7 +160,7 @@ _resend(){
                   height: 15,
                 ),
                 TextFieldPin(
-                 // filled: true,
+                  // filled: true,
                   filledColor: Color(0xffFF741A),
                   codeLength: _otpCodeLength,
                   boxSize: 40,
@@ -160,7 +176,7 @@ _resend(){
                   height: 32,
                 ),
                 Container(
-                  width: _width/1.2,
+                  width: _width / 1.2,
                   child: MaterialButton(
                     onPressed: _enableButton ? _onSubmitOtp : null,
                     child: _setUpButtonChild(),
@@ -172,8 +188,14 @@ _resend(){
                   height: 25,
                 ),
                 InkWell(
-                  child: Text("ReSend",style: TextStyle(color:  resendbtncolor ?Colors.green:Colors.black),),
-                  onTap: () {_resend();},
+                  child: Text(
+                    "ReSend",
+                    style: TextStyle(
+                        color: resendbtncolor ? Colors.green : Colors.black),
+                  ),
+                  onTap: () {
+                    _resend();
+                  },
                 ),
               ],
             ),

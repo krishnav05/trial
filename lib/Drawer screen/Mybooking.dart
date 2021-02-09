@@ -42,11 +42,9 @@ class _MyBookingState extends State<MyBooking> {
                       bottom: 1,
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
-                        color:
-                            connected ? Color(0xFFFFFF) : Color(0xFFEE4400),
+                        color: connected ? Color(0xFFFFFF) : Color(0xFFEE4400),
                         child: connected
-                            ? Row(
-                              )
+                            ? Row()
                             : Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[

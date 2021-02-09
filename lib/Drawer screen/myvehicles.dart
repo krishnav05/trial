@@ -5,33 +5,29 @@ import 'package:Ajreeha/MyVehicle/MyVehiclecards.dart';
 import 'package:Ajreeha/MyVehicle/Vehicleinfo.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 
-
 class MyVehicles extends StatefulWidget {
   @override
   _MyVehiclesState createState() => _MyVehiclesState();
 }
 
 class _MyVehiclesState extends State<MyVehicles> {
-  
-  
-
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title:Text("My Vehicale"),
-        flexibleSpace:Container( decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment(0.8, 0.0),
-                    colors: [const Color(0xff042E6F), const Color(0xff00BAF2)],
-                  )
-      )
-      ),
-      ),
-      drawer: Drawer(
-      child: Drawers(), 
-      ),
-     body: Builder(
+        appBar: AppBar(
+          title: Text("My Vehicale"),
+          flexibleSpace: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment(0.8, 0.0),
+            colors: [const Color(0xff042E6F), const Color(0xff00BAF2)],
+          ))),
+        ),
+        drawer: Drawer(
+          child: Drawers(),
+        ),
+        body: Builder(
           builder: (BuildContext context) {
             return OfflineBuilder(
               connectivityBuilder: (BuildContext context,
@@ -78,28 +74,18 @@ class _MyVehiclesState extends State<MyVehicles> {
                 );
               },
               child: Myvehiclecards(),
-  
             );
           },
         ),
-     
-     
-      floatingActionButton: new FloatingActionButton(
-         heroTag: "btn3",
-      elevation: 0.0,
-      child: new Icon(Icons.add),
-      backgroundColor: new Color(0xFFFF741A),
-      onPressed: ()=>Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) =>    Vehicleform()),
-  ),
-      
-    )
-     
-     
-    );
-    
-    
+        floatingActionButton: new FloatingActionButton(
+          heroTag: "btn3",
+          elevation: 0.0,
+          child: new Icon(Icons.add),
+          backgroundColor: new Color(0xFFFF741A),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Vehicleform()),
+          ),
+        ));
   }
 }
- 

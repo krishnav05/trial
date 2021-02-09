@@ -9,23 +9,26 @@ import 'dart:async';
 
 void main() async {
   HttpOverrides.global = new MyHttpOverrides();
-   WidgetsFlutterBinding.ensureInitialized();
-   AppLanguage appLanguage = AppLanguage();
-   await appLanguage.fetchLocale();
-   runZoned(() {
-  runApp(MyApp(
-    appLanguage: appLanguage,
-  ), 
-  );
-   },onError: (dynamic error, dynamic stack) {
-print(error);
-print(stack);});
+  WidgetsFlutterBinding.ensureInitialized();
+  AppLanguage appLanguage = AppLanguage();
+  await appLanguage.fetchLocale();
+  runZoned(() {
+    runApp(
+      MyApp(
+        appLanguage: appLanguage,
+      ),
+    );
+  }, onError: (dynamic error, dynamic stack) {
+    print(error);
+    print(stack);
+  });
 }
 
 class MyApp extends StatefulWidget {
   final AppLanguage appLanguage;
 
   MyApp({this.appLanguage});
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -48,19 +51,18 @@ class _MyAppState extends State<MyApp> {
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
-
-          home:   SplashScreen(),
+          home: SplashScreen(),
         );
       }),
     );
   }
 }
 
- 
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback =(X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

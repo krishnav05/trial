@@ -3,6 +3,7 @@ import 'package:Ajreeha/localization/App_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
@@ -11,6 +12,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:Ajreeha/MyVehicle/repositary.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Vehicleform extends StatefulWidget {
   @override
@@ -28,6 +30,7 @@ class _VehicleformState extends State<Vehicleform> {
       TextEditingController();
   final TextEditingController mileagecontroller = TextEditingController();
   final TextEditingController conditioncontroller = TextEditingController();
+
 /*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
@@ -44,13 +47,28 @@ class _VehicleformState extends State<Vehicleform> {
   final TextEditingController frontLeftSidecontroller = TextEditingController();
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
+String value_keytoken;
+getStringValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return String
+
+     value_keytoken = prefs.getString('value_key');
+   // isregister = register.isNotEmpty; //verify gives true only
+  }
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
+
+
 
   Position position;
+
   @override
   void initState() {
     getCurrentLocation();
     _states = List.from(_states)..addAll(repo.getStates());
-
+getStringValuesSF();
     super.initState();
   }
 
@@ -58,11 +76,15 @@ class _VehicleformState extends State<Vehicleform> {
     Position res = await Geolocator().getCurrentPosition();
     setState(() {
       position = res;
+
     });
   }
 
   List<Marker> mymarker = [];
+var latitudeorginal;
+var longnitudeoriginal;
 
+ var localityuser;
 /*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
 // dependent car list
   Repository repo = Repository();
@@ -71,6 +93,7 @@ class _VehicleformState extends State<Vehicleform> {
   List<String> _lgas = ["Choose .."];
   String _selectedState = "Choose a Type";
   String _selectedLGA = "Choose ..";
+
 /*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
@@ -80,8 +103,8 @@ class _VehicleformState extends State<Vehicleform> {
   String vehicaletype = "Honda";
   String vehicalemodel = "Accord";
   String vehicaleyear = "2020-year";
-  String vehicaledoor = "2-Door";
-  String vehicaleseat = "2-Seat";
+  String vehicaledoor = "2-Doors";
+  String vehicaleseat = "2-Seats";
 
   bool selected1 = true;
   bool selected2 = true;
@@ -110,6 +133,7 @@ class _VehicleformState extends State<Vehicleform> {
   String photo644;
   String photo645;
   String photo646;
+
 /*------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
   File _image7;
@@ -121,6 +145,19 @@ class _VehicleformState extends State<Vehicleform> {
   String photopath8;
   String photopath9;
   String photopath10;
+/*------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+ String photopath101;
+  String photopath20;
+  String photopath30;
+  String photopath40;
+  String photopath50;
+  String photopath60;
+  String photopath70;
+  String photopath80;
+  String photopath90;
+  String photopath100;
+
+/*------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
   String photo647;
   String photo648;
@@ -149,768 +186,850 @@ class _VehicleformState extends State<Vehicleform> {
         ))),
       ),
       body: Form(
-        key: _form,
-        child: ListView(
-          padding: EdgeInsets.all(10.0),
-          scrollDirection: Axis.vertical,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Color(0xff9BE8FF), width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: Column(
-                children: <Widget>[
+          key: _form,
+          child: ListView(
+            padding: EdgeInsets.all(10.0),
+            scrollDirection: Axis.vertical,
+            children: [
+      Container(
+          decoration: BoxDecoration(
+      color: Colors.white,
+      border: Border.all(color: Color(0xff9BE8FF), width: 2.0),
+      borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: Column(
+            children: <Widget>[
 /*------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 //dependent drop down
-
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.grey)),
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 8.0, right: 8, top: 8),
-                        child: DropdownButton<String>(
-                          underline: Container(),
-                          isExpanded: true,
-                          items: _states.map((String dropDownStringItem) {
-                            return DropdownMenuItem<String>(
-                              value: dropDownStringItem,
-                              child: Text(dropDownStringItem),
-                            );
-                          }).toList(),
-                          onChanged: (value) => _onSelectedState(value),
-                          value: _selectedState,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.grey)),
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 8.0, right: 8, top: 8),
-                        child: DropdownButton<String>(
-                          isExpanded: true,
-                          underline: Container(),
-                          items: _lgas.map((String dropDownStringItem) {
-                            return DropdownMenuItem<String>(
-                              value: dropDownStringItem,
-                              child: Text(dropDownStringItem),
-                            );
-                          }).toList(),
-                          // onChanged: (value) => print(value),
-                          onChanged: (value) => _onSelectedLGA(value),
-                          value: _selectedLGA,
-                        ),
-                      ),
-                    ),
-                  ),
+// Text(value_keytoken),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Colors.grey)),
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 8.0, right: 8, top: 4,bottom: 4),
+            child: DropdownButton<String>(
+              underline: Container(),
+              isExpanded: true,
+              items: _states.map((String dropDownStringItem) {
+                return DropdownMenuItem<String>(
+                  value: dropDownStringItem,
+                  child: Text(dropDownStringItem),
+                );
+              }).toList(),
+              onChanged: (value) => _onSelectedState(value),
+              value: _selectedState,
+            ),
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Colors.grey)),
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 8.0, right: 8, top: 4,bottom: 4),
+            child: DropdownButton<String>(
+              isExpanded: true,
+              underline: Container(),
+              items: _lgas.map((String dropDownStringItem) {
+                return DropdownMenuItem<String>(
+                  value: dropDownStringItem,
+                  child: Text(dropDownStringItem),
+                );
+              }).toList(),
+              // onChanged: (value) => print(value),
+              onChanged: (value) => _onSelectedLGA(value),
+              value: _selectedLGA,
+            ),
+          ),
+        ),
+      ),
 /*------------------------------------------------------------------------------------------------------------------------------------------------------------- */
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.grey)),
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 8.0, right: 8, top: 8),
-                        child: DropdownButtonFormField<String>(
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white))),
-                          isExpanded: true,
-                          value: vehicaleyear,
-                          hint: Text("year"),
-                          items: <String>[
-                            '2020-year',
-                            '2019-year',
-                            '2018-year',
-                            '2017-year'
-                          ].map((String value) {
-                            return new DropdownMenuItem<String>(
-                              value: value,
-                              child: new Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              vehicaleyear = value;
-                              print(vehicaleyear);
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.all(10),
-                      child: TextFormField(
-                        controller: colorcontroller,
-                        validator: (val) {
-                          if (val.isEmpty) return 'Empty';
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Vehicale Color',
-                            hintText: 'Red'),
-                      )),
-                  Padding(
-                      padding: EdgeInsets.all(10),
-                      child: TextFormField(
-                        controller: rentcontroller,
-                        validator: (val) {
-                          if (val.isEmpty) return 'Empty';
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Rent per day',
-                            hintText: '500'),
-                      )),
-                  Padding(
-                      padding: EdgeInsets.all(10),
-                      child: TextFormField(
-                        controller: descriptioncontroller,
-                        validator: (val) {
-                          if (val.isEmpty) return 'Empty';
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Description',
-                            hintText: 'About Car'),
-                      )),
-                  Padding(
-                      padding: EdgeInsets.all(10),
-                      child: TextFormField(
-                        readOnly: true,
-                        validator: (val) {
-                          if (val.isEmpty) return 'Empty';
-                          return null;
-                        },
-                        controller: insuranceexpirycontroller,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Insurance EXpiry Date',
-                          hintText: '14 - 11 - 1985',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              Icons.date_range,
-                              color: Color(0xff00BAF2),
+      Padding(
+        padding: EdgeInsets.all(10),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Colors.grey)),
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 8.0, right: 8, top: 4,bottom: 4),
+            child: DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white))),
+              isExpanded: true,
+              value: vehicaleyear,
+              hint: Text("year"),
+              items: <String>[
+                '2020-year',
+                '2019-year',
+                '2018-year',
+                '2017-year'
+              ].map((String value) {
+                return new DropdownMenuItem<String>(
+                  value: value,
+                  child: new Text(value),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  vehicaleyear = value;
+                  print(vehicaleyear);
+                });
+              },
+            ),
+          ),
+        ),
+      ),
+      Padding(
+          padding: EdgeInsets.all(10),
+          child: TextFormField(
+            controller: colorcontroller,
+            validator: (val) {
+              if (val.isEmpty) return 'Empty';
+              return null;
+            },
+            decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Vehicale Color',
+                hintText: 'Red'),
+          )),
+      Padding(
+          padding: EdgeInsets.all(10),
+          child: TextFormField(
+            controller: rentcontroller,
+            validator: (val) {
+              if (val.isEmpty) return 'Empty';
+              return null;
+            },
+            decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Rent per day',
+                hintText: '500'),
+          )),
+      Padding(
+          padding: EdgeInsets.all(10),
+          child: TextFormField(
+            controller: descriptioncontroller,
+            validator: (val) {
+              if (val.isEmpty) return 'Empty';
+              return null;
+            },
+            decoration: InputDecoration(
+             //  border: InputBorder.none,
+                border: OutlineInputBorder(),
+                labelText: 'Description',
+                hintText: 'About Car'),
+          )),
+      Padding(
+          padding: EdgeInsets.all(10),
+          child: TextFormField(
+            readOnly: true,
+            validator: (val) {
+              if (val.isEmpty) return 'Empty';
+              return null;
+            },
+            controller: insuranceexpirycontroller,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Insurance Expiry Date',
+              hintText: '14 - 11 - 1985',
+              suffixIcon: IconButton(
+                icon: Icon(
+                  Icons.date_range,
+                  color: Color(0xff00BAF2),
+                ),
+                onPressed: () {
+                  showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(4000),
+                      builder:
+                          (BuildContext context, Widget picker) {
+                        return Theme(
+                          data: ThemeData.dark().copyWith(
+                            colorScheme: ColorScheme.dark(
+                              primary: Colors.blue,
+                              onPrimary: Colors.white,
+                              surface: Colors.blue,
+                              onSurface: Colors.black,
                             ),
-                            onPressed: () {
-                              showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime.now(),
-                                  lastDate: DateTime(4000),
-                                  builder:
-                                      (BuildContext context, Widget picker) {
-                                    return Theme(
-                                      data: ThemeData.dark().copyWith(
-                                        colorScheme: ColorScheme.dark(
-                                          primary: Colors.blue,
-                                          onPrimary: Colors.white,
-                                          surface: Colors.blue,
-                                          onSurface: Colors.black,
-                                        ),
-                                        dialogBackgroundColor: Colors.white,
-                                      ),
-                                      child: picker,
-                                    );
-                                  }).then((selectedDate) {
-                                if (selectedDate != null) {
-                                  insuranceexpirycontroller.text =
-                                      selectedDate.toString().substring(0, 10);
-                                } else {
-                                  insuranceexpirycontroller.text = null;
-                                }
-                              });
-                            },
+                            dialogBackgroundColor: Colors.white,
                           ),
-                        ),
-                      )),
-                  Padding(
-                      padding: EdgeInsets.all(10),
-                      child: TextFormField(
-                        controller: mileagecontroller,
-                        validator: (val) {
-                          if (val.isEmpty) return 'Empty';
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'mileage',
-                            hintText: '150km'),
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("Choose Location"),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      height: 70,
-                      width: double.infinity,
-                      child: FittedBox(
-                        child: InkWell(
-                            child: Image.asset('assets/images/map.png'),
-                            onTap: () {
-                              showAlertDialogmap(context);
-                            }),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                  Text(
-                      "Mark our loaction by pin otherwise use current location"),
-                  /*-------------------------------------------------------------------------------------------------------------------*/
-                  // drop down for seat and door of car
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Container(
-                      width: _width,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.grey)),
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 8.0, right: 8, top: 8),
-                        child: DropdownButton<String>(
-                          isExpanded: true,
-                          value: vehicaledoor,
-                          underline: Container(),
-                          hint: Text("Car Door"),
-                          items: <String>[
-                            '2-Door',
-                            '4-Door',
-                            '6-Door',
-                            '8-Door'
-                          ].map((String value) {
-                            return new DropdownMenuItem<String>(
-                              value: value,
-                              child: new Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              vehicaledoor = value;
-                              print(vehicaledoor);
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Container(
-                      width: _width,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.grey)),
-                      child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 8.0, right: 8, top: 8),
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-                            value: vehicaleseat,
-                            underline: Container(),
-                            hint: Text("Seating Capacity"),
-                            items: <String>[
-                              '2-Seat',
-                              '4-Seat',
-                              '6-Seat',
-                              '8-Seat'
-                            ].map((String value) {
-                              return new DropdownMenuItem<String>(
-                                value: value,
-                                child: new Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                vehicaleseat = value;
-                                print(vehicaleseat);
-                              });
-                            },
-                          )
-
-                          // controller: modelcontroller,
-                          // validator: (val) {
-                          //   if (val.isEmpty) return 'Empty';
-                          //   return null;
-                          // },
-                          // decoration: InputDecoration(
-                          //   border: OutlineInputBorder(),
-                          //   labelText: 'Vehicale Model',
-                          //   hintText: '2020',
-                          // )
-                          ),
-                    ),
-                  ),
-/*-------------------------------------------------------------------------------------------------------------------*/
-
-                  Padding(
-                      padding: EdgeInsets.all(10),
-                      child: TextFormField(
-                        controller: conditioncontroller,
-                        validator: (val) {
-                          if (val.isEmpty) return 'Empty';
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'vehicles condition',
-                            hintText: 'Good'),
-                      )),
-
-/*-------------------------------------------------------------------------------------------------------------------*/
-                  // car photo and tapable button on car
-                  Container(
-                    child: Column(
-                      children: [
-                        Text(
-                          "Tap on vehicle image to add further details",
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Tajawal',
-                              fontWeight: FontWeight.bold),
-                        ),
-
-                        // car tape able
-                        Stack(
-                          children: [
-                            SizedBox(
-                              height: 200,
-                              width: 200,
-                              child: SvgPicture.asset(
-                                  "assets/images/car-grid-view.svg"),
-                            ),
-                            Positioned(
-                              right: 55,
-                              top: 20,
-                              child: InkWell(
-                                child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  // color: Colors.red,
-                                  child: Center(
-                                      child: CircleAvatar(
-                                          backgroundColor: Colors.black,
-                                          radius: 13,
-                                          child: Text(
-                                            "2",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ))),
-                                ),
-                                onTap: () {
-                                  showAlertDialogcar2(context);
-                                },
-                              ),
-                            ),
-                            Positioned(
-                              right: 55,
-                              top: 80,
-                              child: InkWell(
-                                child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  // color: Colors.red,
-                                  child: Center(
-                                      child: CircleAvatar(
-                                          backgroundColor: Colors.black,
-                                          radius: 13,
-                                          child: Text(
-                                            "4",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ))),
-                                ),
-                                onTap: () {
-                                  showAlertDialogcar4(context);
-                                },
-                              ),
-                            ),
-                            Positioned(
-                              right: 55,
-                              top: 140,
-                              child: InkWell(
-                                child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  // color: Colors.red,
-                                  child: Center(
-                                      child: CircleAvatar(
-                                          backgroundColor: Colors.black,
-                                          radius: 13,
-                                          child: Text(
-                                            "6",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ))),
-                                ),
-                                onTap: () {
-                                  showAlertDialogcar6(context);
-                                },
-                              ),
-                            ),
-
-                            //left
-                            Positioned(
-                              left: 55,
-                              top: 20,
-                              child: InkWell(
-                                child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  // color: Colors.red,
-                                  child: Center(
-                                      child: CircleAvatar(
-                                          backgroundColor: Colors.black,
-                                          radius: 13,
-                                          child: Text(
-                                            "1",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ))),
-                                ),
-                                onTap: () {
-                                  showAlertDialogcar1(context);
-                                },
-                              ),
-                            ),
-                            Positioned(
-                              left: 55,
-                              top: 80,
-                              child: InkWell(
-                                child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  //color: Colors.red,
-                                  child: Center(
-                                      child: CircleAvatar(
-                                          backgroundColor: Colors.black,
-                                          radius: 13,
-                                          child: Text(
-                                            "3",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ))),
-                                ),
-                                onTap: () {
-                                  showAlertDialogcar3(context);
-                                },
-                              ),
-                            ),
-                            Positioned(
-                              left: 55,
-                              top: 140,
-                              child: InkWell(
-                                child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  // color: Colors.red,
-                                  child: Center(
-                                      child: CircleAvatar(
-                                          backgroundColor: Colors.black,
-                                          radius: 13,
-                                          child: Text(
-                                            "5",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ))),
-                                ),
-                                onTap: () {
-                                  showAlertDialogcar5(context);
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-
-                        Text(
-                          "Upload Vehicale images",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: 'Tajawal',
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-/*-------------------------------------------------------------------------------------------------------------------*/
-
-/*-------------------------------------------------------------------------------------------------------------------*/
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      child: Row(children: [
-                        Container(
-                          color: Colors.grey,
-                          height: _height / 10,
-                          width: _width / 5,
-                          child: InkWell(
-                            child: _image7 == null
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                  )
-                                : Image.file(
-                                    _image7,
-                                    fit: BoxFit.fill,
-                                  ),
-                            onTap: () async {
-                              var imagepath = await ImagePicker.pickImage(
-                                  source: ImageSource.gallery);
-                              final bytes = imagepath.readAsBytesSync();
-                              String _img647 = base64Encode(bytes);
-                              print(_img647);
-                              print("image");
-                              setState(() {
-                                _image7 = imagepath;
-                                photopath7 = (imagepath.toString().split('/').last);
-                                photo647 = _img647;
-                              print(photopath7);
-
-                              });
-                            },
-                          ),
-                        ),
-Spacer(),
-
-                         Container(
-                          color: Colors.grey,
-                          height: _height / 10,
-                          width: _width / 5,
-                          child: InkWell(
-                            child: _image8 == null
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                  )
-                                : Image.file(
-                                    _image8,
-                                    fit: BoxFit.fill,
-                                  ),
-                            onTap: () async {
-                              var imagepath = await ImagePicker.pickImage(
-                                  source: ImageSource.gallery);
-                              final bytes = imagepath.readAsBytesSync();
-                              String _img648 = base64Encode(bytes);
-                              print(_img648);
-                              print("image");
-                              print(imagepath);
-                              setState(() {
-                                _image8 = imagepath;
-                                photopath8 = (imagepath.toString().split('/').last);
-                                photo648 = _img648;
-                              });
-                            },
-                          ),
-                        ),
-Spacer(),
-
-                         Container(
-                          color: Colors.grey,
-                          height: _height / 10,
-                          width: _width / 5,
-                          child: InkWell(
-                            child: _image9 == null
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                  )
-                                : Image.file(
-                                    _image9,
-                                    fit: BoxFit.fill,
-                                  ),
-                            onTap: () async {
-                              var imagepath = await ImagePicker.pickImage(
-                                  source: ImageSource.gallery);
-                              final bytes = imagepath.readAsBytesSync();
-                              String _img649 = base64Encode(bytes);
-                              print(_img649);
-                              print("image");
-                              print(imagepath);
-                              setState(() {
-                                _image9 = imagepath;
-                                photopath9 = (imagepath.toString().split('/').last);
-                                photo649 = _img649;
-                              });
-                            },
-                          ),
-                        ),
-
-Spacer(),
-                         Container(
-                          color: Colors.grey,
-                          height: _height / 10,
-                          width: _width / 5,
-                          child: InkWell(
-                            child: _image10 == null
-                                ? Icon(
-                                    Icons.add,
-                                    size: 20,
-                                  )
-                                : Image.file(
-                                    _image10,
-                                    fit: BoxFit.fill,
-                                  ),
-                            onTap: () async {
-                              var imagepath = await ImagePicker.pickImage(
-                                  source: ImageSource.camera);
-                              final bytes = imagepath.readAsBytesSync();
-                              String _img6410 = base64Encode(bytes);
-                              print(_img6410);
-                              print("image");
-                              print(imagepath);
-                              setState(() {
-                                _image10 = imagepath;
-                                photopath10 = (imagepath.toString().split('/').last);
-                                photo6410 = _img6410;
-                              });
-                            },
-                          ),
-                        ),
-                      ]),
-                    ),
-                  ),
-
-/*-------------------------------------------------------------------------------------------------------------------*/
-
-                  SizedBox(height: 10),
-                  SizedBox(
-                    width: _width,
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      onPressed: () {
-                        if (_form.currentState.validate()) {
-                          http.post(
-                            '',
-                            body: jsonEncode({
-                              "vehicaleType": _selectedState,
-                              "vehicaleModel": _selectedLGA,
-                              "vehicaleYear": vehicaleyear,
-                              "vehicaleColor": colorcontroller.text,
-                              "VehicaleRentPerDay": rentcontroller.text,
-                              "vehicaleDescription": descriptioncontroller.text,
-                              "vehicaleInsuranceExpiredDate":
-                                  insuranceexpirycontroller.text,
-                              "vehicaleMileage": mileagecontroller.text,
-                              "vehicaleMapLocation": mymarker,
-                              "vehicaleDoor": vehicaledoor,
-                              "vehicaleSeatCapacity": vehicaleseat,
-                              "vehicaleCondition": conditioncontroller.text,
- /*-------------------------------------------------------------------------------------------------------------------*/
-
-                              "frontleftsideTick": selected1,
-                              "frontleftsideTicktext":
-                                  frontLeftSidecontroller.text,
-                              "frontleftsideTickimage": photo641,
-                              "frontleftsideTickimagepath": photopath1,
- /*-------------------------------------------------------------------------------------------------------------------*/
-
-                              "frontrightsideTick": selected2,
-                              "frontrightsideTicktext":
-                                  frontRightSidecontroller.text,
-                              "frontrightsideTickimage": photo642,
-                              "frontrightsideTickimagepath": photopath2,
-
- /*-------------------------------------------------------------------------------------------------------------------*/
-
-                              "middleleftsideTick": selected3,
-                              "middleleftsideTicktext":
-                                  middleLeftSidecontroller.text,
-                              "middleleftsideTickimage": photo643,
-                              "middleleftsideTickimagepath": photopath3,
-
- /*-------------------------------------------------------------------------------------------------------------------*/
-
-                              "middlerightsideTick": selected4,
-                              "middlerightsideTicktext":
-                                  middleRightSidecontroller.text,
-                              "middlerightsideTickimage": photo644,
-                              "middlerightsideTickimagepath": photopath4,
-
- /*-------------------------------------------------------------------------------------------------------------------*/
-
-                              "backleftsideTick": selected5,
-                              "backleftsideTicktext":
-                                  backLeftSidecontroller.text,
-                              "backleftsideTickimage": photo645,
-                              "backleftsideTickimagepath": photopath5,
-
- /*-------------------------------------------------------------------------------------------------------------------*/
-
-                              "backrightsideTick": selected6,
-                              "backrightsideTicktext":
-                                  backRightSidecontroller.text,
-                              "backrightsideTickimage": photo646,
-                              "backrightsideTickimagepath": photopath6,
-
- /*-------------------------------------------------------------------------------------------------------------------*/
-
-                              "vehicaleUploadimages7":photo647 ,
-                              "vehicaleUploadimages7path":photopath7 ,
-
-                              "vehicaleUploadimages8": photo648,
-                              "vehicaleUploadimages8path": photopath8,
-
-                              "vehicaleUploadimages9": photo649,
-                              "vehicaleUploadimages9path": photopath9,
-
-                              "vehicaleUploadimages10": photo6410,
-                              "vehicaleUploadimages10path": photopath10,
-
-
-                            }),
-                            headers: {'Content-Type': 'application/json'},
-                          ).then((response) async {
-                            if (response.statusCode == 200) {
-                              Navigator.pop(context);
-                            } else {}
-                          });
-                        }
-                      },
-                      color: Color(0xFF042E6F),
-                      padding: EdgeInsets.all(16.0),
-                      textColor: Colors.white,
-                      child: Text(
-                        AppLocalizations.of(context).translate(
-                          'Add vehicle',
-                        ),
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Tajawal'),
-                      ),
-                    ),
-                  ),
-                ],
+                          child: picker,
+                        );
+                      }).then((selectedDate) {
+                    if (selectedDate != null) {
+                      insuranceexpirycontroller.text =
+                          selectedDate.toString().substring(0, 10);
+                    } else {
+                      insuranceexpirycontroller.text = null;
+                    }
+                  });
+                },
               ),
+            ),
+          )),
+      Padding(
+          padding: EdgeInsets.all(10),
+          child: TextFormField(
+            controller: mileagecontroller,
+            validator: (val) {
+              if (val.isEmpty) return 'Empty';
+              return null;
+            },
+            decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'mileage',
+                hintText: '150km'),
+          )),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text("Choose Location"),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(10),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5))),
+          height: 70,
+          width: double.infinity,
+          child: FittedBox(
+            child: InkWell(
+                child: Image.asset('assets/images/map.png'),
+                onTap: () {
+                  showAlertDialogmap(context);
+                }),
+            fit: BoxFit.fill,
+          ),
+        ),
+      ),
+      Text(
+          "Pls click on map and Choose location"),
+      /*-------------------------------------------------------------------------------------------------------------------*/
+      // drop down for seat and door of car
+      Padding(
+        padding: EdgeInsets.all(10),
+        child: Container(
+          width: _width,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Colors.grey)),
+          child: 
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 8.0, right: 8, top: 4,bottom: 4),
+            child: DropdownButton<String>(
+              isExpanded: true,
+              value: vehicaledoor,
+              underline: Container(),
+              hint: Text("Car Door"),
+              items: <String>[
+                '2-Doors',
+                '4-Doors',
+                '6-Doors',
+                '8-Doors'
+              ].map((String value) {
+                return new DropdownMenuItem<String>(
+                  value: value,
+                  child: new Text(value),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  vehicaledoor = value;
+                  print(vehicaledoor);
+                });
+              },
+            ),
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.all(10),
+        child: Container(
+          width: _width,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Colors.grey)),
+          child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 8.0, right: 8, top: 4,bottom: 4),
+              child: DropdownButton<String>(
+                isExpanded: true,
+                value: vehicaleseat,
+                underline: Container(),
+                hint: Text("Seating Capacity"),
+                items: <String>[
+                  '2-Seats',
+                  '4-Seats',
+                  '6-Seats',
+                  '8-Seats'
+                ].map((String value) {
+                  return new DropdownMenuItem<String>(
+                    value: value,
+                    child: new Text(value),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    vehicaleseat = value;
+                    print(vehicaleseat);
+                  });
+                },
+              )
+              ),
+        ),
+      ),
+/*-------------------------------------------------------------------------------------------------------------------*/
+
+      Padding(
+          padding: EdgeInsets.all(10),
+          child: TextFormField(
+            controller: conditioncontroller,
+            validator: (val) {
+              if (val.isEmpty) return 'Empty';
+              return null;
+            },
+            decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'vehicles condition',
+                hintText: 'Good'),
+          )),
+
+/*-------------------------------------------------------------------------------------------------------------------*/
+      // car photo and tapable button on car
+      Container(
+        child: Column(
+          children: [
+            Text(
+              "Tap on vehicle image to add further details",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Tajawal',
+                  fontWeight: FontWeight.bold),
+            ),
+
+            // car tape able
+            Stack(
+              children: [
+                SizedBox(
+                  height: 200,
+                  width: 200,
+                  child: SvgPicture.asset(
+                      "assets/images/car-grid-view.svg"),
+                ),
+                Positioned(
+                  right: 55,
+                  top: 20,
+                  child: InkWell(
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      // color: Colors.red,
+                      child: Center(
+                          child: CircleAvatar(
+                              backgroundColor: Colors.black,
+                              radius: 13,
+                              child: Text(
+                                "2",
+                                style:
+                                    TextStyle(color: Colors.white),
+                              ))),
+                    ),
+                    onTap: () {
+                      showAlertDialogcar2(context);
+                    },
+                  ),
+                ),
+                Positioned(
+                  right: 55,
+                  top: 80,
+                  child: InkWell(
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      // color: Colors.red,
+                      child: Center(
+                          child: CircleAvatar(
+                              backgroundColor: Colors.black,
+                              radius: 13,
+                              child: Text(
+                                "4",
+                                style:
+                                    TextStyle(color: Colors.white),
+                              ))),
+                    ),
+                    onTap: () {
+                      showAlertDialogcar4(context);
+                    },
+                  ),
+                ),
+                Positioned(
+                  right: 55,
+                  top: 140,
+                  child: InkWell(
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      // color: Colors.red,
+                      child: Center(
+                          child: CircleAvatar(
+                              backgroundColor: Colors.black,
+                              radius: 13,
+                              child: Text(
+                                "6",
+                                style:
+                                    TextStyle(color: Colors.white),
+                              ))),
+                    ),
+                    onTap: () {
+                      showAlertDialogcar6(context);
+                    },
+                  ),
+                ),
+
+                //left
+                Positioned(
+                  left: 55,
+                  top: 20,
+                  child: InkWell(
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      // color: Colors.red,
+                      child: Center(
+                          child: CircleAvatar(
+                              backgroundColor: Colors.black,
+                              radius: 13,
+                              child: Text(
+                                "1",
+                                style:
+                                    TextStyle(color: Colors.white),
+                              ))),
+                    ),
+                    onTap: () {
+                      showAlertDialogcar1(context);
+                    },
+                  ),
+                ),
+                Positioned(
+                  left: 55,
+                  top: 80,
+                  child: InkWell(
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      //color: Colors.red,
+                      child: Center(
+                          child: CircleAvatar(
+                              backgroundColor: Colors.black,
+                              radius: 13,
+                              child: Text(
+                                "3",
+                                style:
+                                    TextStyle(color: Colors.white),
+                              ))),
+                    ),
+                    onTap: () {
+                      showAlertDialogcar3(context);
+                    },
+                  ),
+                ),
+                Positioned(
+                  left: 55,
+                  top: 140,
+                  child: InkWell(
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      // color: Colors.red,
+                      child: Center(
+                          child: CircleAvatar(
+                              backgroundColor: Colors.black,
+                              radius: 13,
+                              child: Text(
+                                "5",
+                                style:
+                                    TextStyle(color: Colors.white),
+                              ))),
+                    ),
+                    onTap: () {
+                      showAlertDialogcar5(context);
+                    },
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+
+            Text(
+              "Upload Vehicale images",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Tajawal',
+                  fontWeight: FontWeight.bold),
             ),
           ],
         ),
       ),
+/*-------------------------------------------------------------------------------------------------------------------*/
+
+/*-------------------------------------------------------------------------------------------------------------------*/
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          child: Row(children: [
+            Container(
+              color: Colors.grey,
+              height: _height / 10,
+              width: _width / 5,
+              child: InkWell(
+                child: _image7 == null
+                    ? Icon(
+                        Icons.add,
+                        size: 20,
+                      )
+                    : Image.file(
+                        _image7,
+                        fit: BoxFit.fill,
+                      ),
+                onTap: () async {
+                  var imagepath = await ImagePicker.pickImage(
+                      source: ImageSource.gallery);
+                  final bytes = imagepath.readAsBytesSync();
+                  String _img647 = base64Encode(bytes);
+                  print(_img647);
+                  print("image");
+                  setState(() {
+                    _image7 = imagepath;
+                    photopath7 =
+                        (imagepath.toString().split('/').last);
+                        photopath70 =
+                        (photopath7.toString().split("'").first);
+                    photo647 = _img647;
+                    print(photopath7);
+                  });
+                },
+              ),
+            ),
+            Spacer(),
+            Container(
+              color: Colors.grey,
+              height: _height / 10,
+              width: _width / 5,
+              child: InkWell(
+                child: _image8 == null
+                    ? Icon(
+                        Icons.add,
+                        size: 20,
+                      )
+                    : Image.file(
+                        _image8,
+                        fit: BoxFit.fill,
+                      ),
+                onTap: () async {
+                  var imagepath = await ImagePicker.pickImage(
+                      source: ImageSource.gallery);
+                  final bytes = imagepath.readAsBytesSync();
+                  String _img648 = base64Encode(bytes);
+                  print(_img648);
+                  print("image");
+                  print(imagepath);
+                  setState(() {
+                    _image8 = imagepath;
+                    photopath8 =
+                        (imagepath.toString().split('/').last);
+                         photopath80 =
+                        (photopath8.toString().split("'").first);
+                    photo648 = _img648;
+                  });
+                },
+              ),
+            ),
+            Spacer(),
+            Container(
+              color: Colors.grey,
+              height: _height / 10,
+              width: _width / 5,
+              child: InkWell(
+                child: _image9 == null
+                    ? Icon(
+                        Icons.add,
+                        size: 20,
+                      )
+                    : Image.file(
+                        _image9,
+                        fit: BoxFit.fill,
+                      ),
+                onTap: () async {
+                  var imagepath = await ImagePicker.pickImage(
+                      source: ImageSource.gallery);
+                  final bytes = imagepath.readAsBytesSync();
+                  String _img649 = base64Encode(bytes);
+                  print(_img649);
+                  print("image");
+                  print(imagepath);
+                  setState(() {
+                    _image9 = imagepath;
+                    photopath9 =
+                        (imagepath.toString().split('/').last);
+                         photopath90 =
+                        (photopath9.toString().split(" ' ").first);
+                    photo649 = _img649;
+                  });
+                },
+              ),
+            ),
+            Spacer(),
+            Container(
+              color: Colors.grey,
+              height: _height / 10,
+              width: _width / 5,
+              child: InkWell(
+                child: _image10 == null
+                    ? Icon(
+                        Icons.add,
+                        size: 20,
+                      )
+                    : Image.file(
+                        _image10,
+                        fit: BoxFit.fill,
+                      ),
+                onTap: () async {
+                  var imagepath = await ImagePicker.pickImage(
+                      source: ImageSource.camera);
+                  final bytes = imagepath.readAsBytesSync();
+            //  String  basename  =basename(imagepath.path);
+                  String _img6410 = base64Encode(bytes);
+                  print(_img6410);
+                  print("image");
+                  print(imagepath);
+                  
+                  setState(() {
+                    _image10 = imagepath;
+                    photopath10 =(imagepath.toString().split('/').last);
+                    photopath100= ( photopath10.toString().split("'").first);  
+                    photo6410 = _img6410;
+                    print( photopath10);
+                    print( photopath100);
+                  });
+                },
+              ),
+            ),
+          ]),
+        ),
+      ),
+
+/*-------------------------------------------------------------------------------------------------------------------*/
+
+      SizedBox(height: 10),
+      SizedBox(
+        width: _width,
+        child: RaisedButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          onPressed: () {
+            print({  "vehicaleType": _selectedState,
+                  "vehicaleModel": _selectedLGA,
+                  "vehicaleYear": vehicaleyear,
+                  "vehicaleColor": colorcontroller.text,
+                  "VehicaleRentPerDay": rentcontroller.text,
+                  "vehicaleDescription": descriptioncontroller.text,
+                  "vehicaleInsuranceExpiredDate":
+                      insuranceexpirycontroller.text,
+                  "vehicaleMileage": mileagecontroller.text,
+
+                  "vehicaleMapcordinatelangitude":latitudeorginal,
+                  "vehicaleMapcordinatelongnitude":longnitudeoriginal,
+                  "vehicaleLocality":localityuser,
+
+                  "vehicaleDoor": vehicaledoor,
+                  "vehicaleSeatCapacity": vehicaleseat,
+                  "vehicaleCondition": conditioncontroller.text,
+                  /*-------------------------------------------------------------------------------------------------------------------*/
+
+                  "frontleftsideTick": selected1,
+                  "frontleftsideTicktext":
+                      frontLeftSidecontroller.text,
+                  "frontleftsideTickimage": photo641,
+                  "frontleftsideTickimagepath": photopath1,
+                  /*-------------------------------------------------------------------------------------------------------------------*/
+
+                  "frontrightsideTick": selected2,
+                  "frontrightsideTicktext":
+                      frontRightSidecontroller.text,
+                  "frontrightsideTickimage": photo642,
+                  "frontrightsideTickimagepath": photopath2,
+
+                  /*-------------------------------------------------------------------------------------------------------------------*/
+
+                  "middleleftsideTick": selected3,
+                  "middleleftsideTicktext":
+                      middleLeftSidecontroller.text,
+                  "middleleftsideTickimage": photo643,
+                  "middleleftsideTickimagepath": photopath3,
+
+                  /*-------------------------------------------------------------------------------------------------------------------*/
+
+                  "middlerightsideTick": selected4,
+                  "middlerightsideTicktext":
+                      middleRightSidecontroller.text,
+                  "middlerightsideTickimage": photo644,
+                  "middlerightsideTickimagepath": photopath4,
+
+                  /*-------------------------------------------------------------------------------------------------------------------*/
+
+                  "backleftsideTick": selected5,
+                  "backleftsideTicktext":
+                      backLeftSidecontroller.text,
+                  "backleftsideTickimage": photo645,
+                  "backleftsideTickimagepath": photopath5,
+
+                  /*-------------------------------------------------------------------------------------------------------------------*/
+
+                  "backrightsideTick": selected6,
+                  "backrightsideTicktext":
+                      backRightSidecontroller.text,
+                  "backrightsideTickimage": photo646,
+                  "backrightsideTickimagepath": photopath6,
+
+                  /*-------------------------------------------------------------------------------------------------------------------*/
+
+                  "vehicaleUploadimages7": photo647,
+                  "vehicaleUploadimages7path": photopath7,
+                  "vehicaleUploadimages8": photo648,
+                  "vehicaleUploadimages8path": photopath8,
+                  "vehicaleUploadimages9": photo649,
+                  "vehicaleUploadimages9path": photopath9,
+                  "vehicaleUploadimages10": photo6410,
+                  "vehicaleUploadimages10path": photopath10,});
+            if (_form.currentState.validate()) {
+              http.post(
+                'https://ajerrha.com/api/create/vehicle',
+                body: jsonEncode({
+                  "vehicaleType": _selectedState,
+                  "vehicaleModel": _selectedLGA,
+                  "vehicaleYear": vehicaleyear,
+                  "vehicaleColor": colorcontroller.text,
+                  "VehicaleRentPerDay": rentcontroller.text,
+                  "vehicaleDescription": descriptioncontroller.text,
+                  "vehicaleInsuranceExpiredDate":
+                      insuranceexpirycontroller.text,
+                  "vehicaleMileage": mileagecontroller.text,
+
+                  "vehicaleMapcordinatelangitude":latitudeorginal,
+                  "vehicaleMapcordinatelongnitude":longnitudeoriginal,
+                  "vehicaleLocality":localityuser,
+
+                  "vehicaleDoor": vehicaledoor,
+                  "vehicaleSeatCapacity": vehicaleseat,
+                  "vehicaleCondition": conditioncontroller.text,
+                  /*-------------------------------------------------------------------------------------------------------------------*/
+
+                  "frontleftsideTick": selected1,
+                  "frontleftsideTicktext":
+                      frontLeftSidecontroller.text,
+                  "frontleftsideTickimage": photo641,
+                  "frontleftsideTickimagepath": photopath101,
+                  /*-------------------------------------------------------------------------------------------------------------------*/
+
+                  "frontrightsideTick": selected2,
+                  "frontrightsideTicktext":
+                      frontRightSidecontroller.text,
+                  "frontrightsideTickimage": photo642,
+                  "frontrightsideTickimagepath": photopath20,
+
+                  /*-------------------------------------------------------------------------------------------------------------------*/
+
+                  "middleleftsideTick": selected3,
+                  "middleleftsideTicktext":
+                      middleLeftSidecontroller.text,
+                  "middleleftsideTickimage": photo643,
+                  "middleleftsideTickimagepath": photopath30,
+
+                  /*-------------------------------------------------------------------------------------------------------------------*/
+
+                  "middlerightsideTick": selected4,
+                  "middlerightsideTicktext":
+                      middleRightSidecontroller.text,
+                  "middlerightsideTickimage": photo644,
+                  "middlerightsideTickimagepath": photopath40,
+
+                  /*-------------------------------------------------------------------------------------------------------------------*/
+
+                  "backleftsideTick": selected5,
+                  "backleftsideTicktext":
+                      backLeftSidecontroller.text,
+                  "backleftsideTickimage": photo645,
+                  "backleftsideTickimagepath": photopath50,
+
+                  /*-------------------------------------------------------------------------------------------------------------------*/
+
+                  "backrightsideTick": selected6,
+                  "backrightsideTicktext":
+                      backRightSidecontroller.text,
+                  "backrightsideTickimage": photo646,
+                  "backrightsideTickimagepath": photopath60,
+
+                  /*-------------------------------------------------------------------------------------------------------------------*/
+
+                  "vehicaleUploadimages7": photo647,
+                  "vehicaleUploadimages7path": photopath70,
+                  "vehicaleUploadimages8": photo648,
+                  "vehicaleUploadimages8path": photopath80,
+                  "vehicaleUploadimages9": photo649,
+                  "vehicaleUploadimages9path": photopath90,
+                  "vehicaleUploadimages10": photo6410,
+                  "vehicaleUploadimages10path": photopath100,
+                }),
+                headers: {'Content-Type': 'application/json',
+                 'Authorization': 'Bearer ' + value_keytoken ,
+                },
+              ).then((response) async {
+                if (response.statusCode == 200) {
+                  print(response.body);
+                  Navigator.pop(context);
+               //   Navigator.pop(context);
+
+
+                } else {
+                  
+                }
+              });
+            }
+          },
+          color: Color(0xFF042E6F),
+          padding: EdgeInsets.all(16.0),
+          textColor: Colors.white,
+          child: Text(
+            AppLocalizations.of(context).translate(
+              'Add vehicle',
+            ),
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Tajawal'),
+          ),
+        ),
+      ),
+            ],
+          ),
+        ),
+            ],
+          ),
+        ),
     );
   }
 
@@ -948,6 +1067,7 @@ Spacer(),
                     ),
                     onPressed: () {
                       //   Navigator.pop(context);
+                    //  print()
                       setState(() {
                         mymarker = [];
                         mymarker.add(
@@ -957,7 +1077,10 @@ Spacer(),
                               ),
                               position: LatLng(
                                   position.latitude, position.longitude)),
+                       
                         );
+                        latitudeorginal=position.latitude;
+                        longnitudeoriginal=position.longitude;
                         print(position.toString());
                       });
                     },
@@ -995,7 +1118,11 @@ Spacer(),
                         " Save Location",
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {
+                      onPressed: ()async {
+                           var addresses = await Geocoder.local.findAddressesFromCoordinates(Coordinates(latitudeorginal,longnitudeoriginal));
+                          var  first = addresses.first;
+                           localityuser=first.locality;
+                         print("${first.locality}");
                         Navigator.pop(context);
                       },
                     ),
@@ -1017,6 +1144,7 @@ Spacer(),
       },
     );
   }
+
   /*-------------------------------------------------------------------------------------------------------------------*/
 
   /*-------------------------------------------------------------------------------------------------------------------*/
@@ -1114,7 +1242,14 @@ Spacer(),
                                         print(imagepath);
                                         setState(() {
                                           _image1 = imagepath;
-                                          photopath1 = (imagepath.toString().split('/').last);
+                                          photopath1 = (imagepath
+                                              .toString()
+                                              .split('/')
+                                              .last);
+                                                photopath101 = (photopath1
+                                              .toString()
+                                              .split("'")
+                                              .first);
                                           photo641 = _img641;
                                         });
                                       },
@@ -1138,7 +1273,14 @@ Spacer(),
                                         print(imagepath);
                                         setState(() {
                                           _image1 = imagepath;
-                                          photopath1 = (imagepath.toString().split('/').last);
+                                          photopath1 = (imagepath
+                                              .toString()
+                                              .split('/')
+                                              .last);
+                                               photopath101 = (photopath1
+                                              .toString()
+                                              .split("'")
+                                              .first);
                                           photo641 = _img641;
                                         });
                                       },
@@ -1278,7 +1420,14 @@ Spacer(),
                                         print(imagepath);
                                         setState(() {
                                           _image2 = imagepath;
-                                          photopath2 = (imagepath.toString().split('/').last);
+                                          photopath2 = (imagepath
+                                              .toString()
+                                              .split('/')
+                                              .last);
+                                               photopath20 = (photopath2
+                                              .toString()
+                                              .split("'")
+                                              .first);
                                           photo642 = _img642;
                                         });
                                       },
@@ -1302,7 +1451,14 @@ Spacer(),
                                         print(imagepath);
                                         setState(() {
                                           _image2 = imagepath;
-                                          photopath2 = (imagepath.toString().split('/').last);
+                                          photopath2 = (imagepath
+                                              .toString()
+                                              .split('/')
+                                              .last);
+                                               photopath20 = (photopath2
+                                              .toString()
+                                              .split("'")
+                                              .first);
                                           photo642 = _img642;
                                         });
                                       },
@@ -1442,7 +1598,14 @@ Spacer(),
                                         print(imagepath);
                                         setState(() {
                                           _image3 = imagepath;
-                                          photopath3 = (imagepath.toString().split('/').last);
+                                          photopath3 = (imagepath
+                                              .toString()
+                                              .split('/')
+                                              .last);
+                                               photopath30 = ( photopath3
+                                              .toString()
+                                              .split(" ' ")
+                                              .first);
                                           photo643 = _img643;
                                         });
                                       },
@@ -1466,7 +1629,14 @@ Spacer(),
                                         print(imagepath);
                                         setState(() {
                                           _image3 = imagepath;
-                                          photopath3 = (imagepath.toString().split('/').last);
+                                          photopath3 = (imagepath
+                                              .toString()
+                                              .split('/')
+                                              .last);
+                                               photopath30 = ( photopath3
+                                              .toString()
+                                              .split(" ' ")
+                                              .first);
                                           photo643 = _img643;
                                         });
                                       },
@@ -1606,7 +1776,14 @@ Spacer(),
                                         print(imagepath);
                                         setState(() {
                                           _image4 = imagepath;
-                                          photopath4 = (imagepath.toString().split('/').last);
+                                          photopath4 = (imagepath
+                                              .toString()
+                                              .split('/')
+                                              .last);
+                                               photopath40 = (photopath4
+                                              .toString()
+                                              .split("'")
+                                              .first);
                                           photo644 = _img644;
                                         });
                                       },
@@ -1630,7 +1807,14 @@ Spacer(),
                                         print(imagepath);
                                         setState(() {
                                           _image4 = imagepath;
-                                          photopath4 = (imagepath.toString().split('/').last);
+                                          photopath4 = (imagepath
+                                              .toString()
+                                              .split('/')
+                                              .last);
+                                                photopath40 = (photopath4
+                                              .toString()
+                                              .split("'")
+                                              .first);
                                           photo644 = _img644;
                                         });
                                       },
@@ -1770,7 +1954,14 @@ Spacer(),
                                         print(imagepath);
                                         setState(() {
                                           _image5 = imagepath;
-                                          photopath5 = (imagepath.toString().split('/').last);
+                                          photopath5 = (imagepath
+                                              .toString()
+                                              .split('/')
+                                              .last);
+                                               photopath50 = (photopath5
+                                              .toString()
+                                              .split("'")
+                                              .first);
                                           photo645 = _img645;
                                         });
                                       },
@@ -1794,7 +1985,14 @@ Spacer(),
                                         print(imagepath);
                                         setState(() {
                                           _image5 = imagepath;
-                                          photopath5 = (imagepath.toString().split('/').last);
+                                          photopath5 = (imagepath
+                                              .toString()
+                                              .split('/')
+                                              .last);
+                                                photopath50 = (photopath5
+                                              .toString()
+                                              .split("'")
+                                              .first);
                                           photo645 = _img645;
                                         });
                                       },
@@ -1934,7 +2132,14 @@ Spacer(),
                                         print(imagepath);
                                         setState(() {
                                           _image6 = imagepath;
-                                          photopath6 = (imagepath.toString().split('/').last);
+                                          photopath6 = (imagepath
+                                              .toString()
+                                              .split('/')
+                                              .last);
+                                               photopath60 = (photopath6
+                                              .toString()
+                                              .split("'")
+                                              .first);
                                           photo646 = _img646;
                                         });
                                       },
@@ -1958,7 +2163,14 @@ Spacer(),
                                         print(imagepath);
                                         setState(() {
                                           _image6 = imagepath;
-                                          photopath6 = (imagepath.toString().split('/').last);
+                                          photopath6 = (imagepath
+                                              .toString()
+                                              .split('/')
+                                              .last);
+                                                photopath60 = (photopath6
+                                              .toString()
+                                              .split("'")
+                                              .first);
                                           photo646 = _img646;
                                         });
                                       },
@@ -2005,6 +2217,7 @@ Spacer(),
       },
     );
   }
+
   /*-------------------------------------------------------------------------------------------------------------------*/
 //dependent car list
 

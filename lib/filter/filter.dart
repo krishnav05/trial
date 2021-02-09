@@ -191,7 +191,6 @@ class _SimpleCustomAlertState extends State<SimpleCustomAlert> {
                         ),
                       ),
                     ),
-                   
                   ],
                 ),
               ),

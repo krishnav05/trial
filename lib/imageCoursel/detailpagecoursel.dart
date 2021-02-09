@@ -15,6 +15,7 @@ class DetailCoursel extends StatefulWidget {
 
 class _DetailCourselState extends State<DetailCoursel> {
   CarouselController buttonCarouselController = CarouselController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -41,8 +42,10 @@ class _DetailCourselState extends State<DetailCoursel> {
               );
             }).toList(),
           ),
-          SizedBox(height: 20,),
-           CarouselSlider(
+          SizedBox(
+            height: 20,
+          ),
+          CarouselSlider(
             options: CarouselOptions(
               height: 60.0,
               autoPlay: false,
@@ -61,10 +64,11 @@ class _DetailCourselState extends State<DetailCoursel> {
                           imageLink,
                           fit: BoxFit.cover,
                         ),
-                        onTap:(){
-                         print(imageLinks.indexOf(imageLink));
+                        onTap: () {
+                          print(imageLinks.indexOf(imageLink));
                           setState(() {
-                            buttonCarouselController.jumpToPage(imageLinks.indexOf(imageLink));
+                            buttonCarouselController
+                                .jumpToPage(imageLinks.indexOf(imageLink));
                           });
                         },
                       ));
@@ -72,9 +76,6 @@ class _DetailCourselState extends State<DetailCoursel> {
               );
             }).toList(),
           )
-
         ]);
   }
 }
-
-

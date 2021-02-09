@@ -53,137 +53,129 @@ class _BookingdetailState extends State<Bookingdetail> {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
     return Scaffold(
-        body: NestedScrollView(
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverAppBar(
-                  actions: <Widget>[
-                    showtext
-                        ? IconButton(
-                            icon: Icon(
-                              Icons.search,
-                              color: _theme, // Here
-                            ),
-                            onPressed: () {},
-                          )
-                        : SizedBox.shrink()
+        body: NestedScrollView(headerSliverBuilder:
+            (BuildContext context, bool innerBoxIsScrolled) {
+      return <Widget>[
+        SliverAppBar(
+          actions: <Widget>[
+            showtext
+                ? IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: _theme, // Here
+                    ),
+                    onPressed: () {},
+                  )
+                : SizedBox.shrink()
+          ],
+          expandedHeight: ResponsiveFlutter.of(context).hp(15),
+          floating: false,
+          pinned: true,
+          toolbarHeight: 40,
+          flexibleSpace: FlexibleSpaceBar(
+            title: showtext
+                ? SafeArea(
+                    child: Padding(
+                    padding: const EdgeInsets.only(top: 5, left: 2),
+                    child: Text('Booking detail'),
+                  ))
+                : Text(''),
+            background: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment(0.8, 0.0),
+                colors: [const Color(0xff042E6F), const Color(0xff00BAF2)],
+              )),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 65, left: 30, right: 30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Text('Range Rover - White ',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold)),
+                        Icon(
+                          Icons.star,
+                          color: Color(0xffFFA53E),
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Color(0xffFFA53E),
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Color(0xffFFA53E),
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Color(0xffFFA53E),
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Color(0xffFFA53E),
+                        )
+                      ],
+                    ),
                   ],
-                  expandedHeight: ResponsiveFlutter.of(context).hp(15),
-                  floating: false,
-                  pinned: true,
-                  toolbarHeight: 40,
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: showtext
-                        ? SafeArea(
-                            child: Padding(
-                            padding: const EdgeInsets.only(top: 5, left: 2),
-                            child: Text('Booking detail'),
-                          ))
-                        : Text(''),
-                    background: Container(
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment(0.8, 0.0),
-                        colors: [
-                          const Color(0xff042E6F),
-                          const Color(0xff00BAF2)
-                        ],
-                      )),
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(top: 65, left: 30, right: 30),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Row(
-                              children: [
-                                Text('Range Rover - White ',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold)),
-                                Icon(
-                                  Icons.star,
-                                  color: Color(0xffFFA53E),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ];
+    }, body: Builder(
+      builder: (BuildContext context) {
+        return OfflineBuilder(
+            connectivityBuilder: (BuildContext context,
+                ConnectivityResult connectivity, Widget child) {
+              final bool connected = connectivity != ConnectivityResult.none;
+              return Stack(
+                fit: StackFit.expand,
+                children: [
+                  child,
+                  Positioned(
+                    left: 0.0,
+                    right: 0.0,
+                    height: 30.0,
+                    bottom: 1,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      color: connected ? Color(0xFFFFFF) : Color(0xFFEE4400),
+                      child: connected
+                          ? Row()
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  "OFFLINE",
+                                  style: TextStyle(color: Colors.white),
                                 ),
-                                Icon(
-                                  Icons.star,
-                                  color: Color(0xffFFA53E),
+                                SizedBox(
+                                  width: 8.0,
                                 ),
-                                Icon(
-                                  Icons.star,
-                                  color: Color(0xffFFA53E),
+                                SizedBox(
+                                  width: 12.0,
+                                  height: 12.0,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.0,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
+                                  ),
                                 ),
-                                Icon(
-                                  Icons.star,
-                                  color: Color(0xffFFA53E),
-                                ),
-                                Icon(
-                                  Icons.star,
-                                  color: Color(0xffFFA53E),
-                                )
                               ],
                             ),
-                          ],
-                        ),
-                      ),
                     ),
                   ),
-                ),
-              ];
+                ],
+              );
             },
-
-body:
-Builder(
-          builder: (BuildContext context) {
-            return OfflineBuilder(
-              connectivityBuilder: (BuildContext context,
-                  ConnectivityResult connectivity, Widget child) {
-                final bool connected = connectivity != ConnectivityResult.none;
-                return Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    child,
-                    Positioned(
-                      left: 0.0,
-                      right: 0.0,
-                      height: 30.0,
-                      bottom: 1,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        color: connected ? Color(0xFFFFFF) : Color(0xFFEE4400),
-                        child: connected
-                            ? Row()
-                            : Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    "OFFLINE",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  SizedBox(
-                                    width: 8.0,
-                                  ),
-                                  SizedBox(
-                                    width: 12.0,
-                                    height: 12.0,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.0,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.white),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                      ),
-                    ),
-                  ],
-                );
-              },
-              child: Padding(
+            child: Padding(
                 padding: EdgeInsets.only(
                     left: _width * 0.030, right: _width * 0.030, top: 10),
                 child: Container(
@@ -517,7 +509,6 @@ Builder(
                                   }),
                                 ),
                               ),
-                             
                               Padding(
                                 padding:
                                     const EdgeInsets.only(left: 10, right: 10),
@@ -560,10 +551,10 @@ Builder(
                                   textColor: Colors.black,
                                 ),
                               ),
-                               SizedBox(
+                              SizedBox(
                                 height: 0.015 * _height,
                               ),
-                               Padding(
+                              Padding(
                                 padding:
                                     const EdgeInsets.only(left: 10, right: 10),
                                 child: SizedBox(
@@ -583,20 +574,16 @@ Builder(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5.0),
                                     ),
-                                    onPressed: () =>{
-            Navigator.pop(
-              context,
-             
-            )
-          },
-                                     
-                                    
+                                    onPressed: () => {
+                                      Navigator.pop(
+                                        context,
+                                      )
+                                    },
                                     color: Colors.grey,
                                     textColor: Colors.white,
                                   ),
                                 ),
                               ),
-                             
                               SizedBox(
                                 height: 0.035 * _height,
                               ),
@@ -604,28 +591,9 @@ Builder(
                           ),
                         ),
                       ],
-                    )))
-
-
-            );
-          },
-        )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-           ));
+                    ))));
+      },
+    )));
   }
 
   void _showDialog(context) {

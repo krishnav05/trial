@@ -9,6 +9,7 @@ import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:Ajreeha/Firsthome.dart';
 
 class LoginUi extends StatefulWidget {
   @override
@@ -71,6 +72,7 @@ class _LoginUiState extends State<LoginUi> {
   bool _obscureText = true;
 
   String _password;
+
   void _toggle() {
     setState(() {
       _obscureText = !_obscureText;
@@ -80,6 +82,7 @@ class _LoginUiState extends State<LoginUi> {
   String initialCountry = 'SA';
   PhoneNumber number = PhoneNumber(isoCode: 'SA');
   var mobile_no = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -152,9 +155,9 @@ class _LoginUiState extends State<LoginUi> {
                       padding: EdgeInsets.only(
                           top: 30, left: 20, right: 20, bottom: 10),
                       child: Container(
-                         height: 55,
+                        height: 55,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(5),
                             border: Border.all(color: Colors.grey)),
                         child: InternationalPhoneNumberInput(
                           inputBorder: InputBorder.none,
@@ -221,7 +224,6 @@ class _LoginUiState extends State<LoginUi> {
                         ],
                       ),
                     ),
-
                     SizedBox(
                       height: 10,
                     ),
@@ -245,13 +247,28 @@ class _LoginUiState extends State<LoginUi> {
                                 }),
                                 headers: {'Content-Type': 'application/json'},
                               ).then((response) async {
-                                var preferences = await SharedPreferences.getInstance(); // Save a value
-                                preferences.setString('value_key',response.body); // Retrieve value later
-                                if (response.statusCode == 200) {
+                                var preferences = await SharedPreferences
+                                    .getInstance(); // Save a value
+                                
+                                    final res =json.decode(response.body);// Retrieve value later
+                                     preferences.setString('value_key', res["token"]);
+
+                                    print(res["token"]);
+                                    print(res["status"]);
+
+                                if (res["status"] == "success") {
                                   isLogin = true;
-                                  Navigator.pop(context);
+
+                                  showAlertDialogloginsucessfull(context);
+                                  Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => FirstHome()),
+            (Route<dynamic> route) => false,
+      );
+                                //  Navigator.pop(context);
                                 } else {
                                   isLogin = false;
+                                   showAlertDialogloginnotsucessfull(context);
                                 }
                               });
                             }
@@ -277,7 +294,6 @@ class _LoginUiState extends State<LoginUi> {
                     SizedBox(
                       height: ResponsiveFlutter.of(context).hp(1),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: GestureDetector(
@@ -314,5 +330,57 @@ class _LoginUiState extends State<LoginUi> {
       ),
     );
   }
- 
+  showAlertDialogloginsucessfull(BuildContext context) {
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("SuccessFull"),
+      content: Text("Have a Good Day"),
+      actions: [
+          new FlatButton(
+            onPressed: () {
+              
+              // dismisses only the dialog and returns nothing
+             },
+            child: new Text('OK'),
+          ),
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+  
+  showAlertDialogloginnotsucessfull(BuildContext context) {
+    // set up the AlertDialog
+    
+    AlertDialog alert = AlertDialog(
+      title: Text("Not Login "),
+      content: Text("Something Wrong"),
+      actions: [
+         new FlatButton(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true)
+                  .pop(); // dismisses only the dialog and returns nothing
+             },
+            child: new Text('OK'),
+          ),
+      ],
+      
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+                                  sleep(const Duration(seconds: 2));
+
+  }
 }
