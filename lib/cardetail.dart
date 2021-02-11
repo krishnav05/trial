@@ -11,39 +11,66 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'booking.dart';
+
+import 'package:carousel_slider/carousel_slider.dart';
+
 // ignore: camel_case_types
 class vehicleDetails extends StatefulWidget {
+  final vehicleid;
+  final String vehiclename;
+  final String vehicle1;
+  final String vehicle2;
+  final String vehicle3;
+  final String vehicle4;
+  final String vehiclerate;
+  final String vehiclemilage;
+  final String vehicledescprition;
+  var vehicleinsurance;
+  var vehicalelang;
+  var vehicalelong;
+
+  vehicleDetails({
+    Key key,
+    this.vehicleid,
+    this.vehiclename,
+    this.vehicle1,
+    this.vehicle2,
+    this.vehicle3,
+    this.vehicle4,
+    this.vehiclerate,
+    this.vehiclemilage,
+    this.vehicledescprition,
+    this.vehicleinsurance,
+    this.vehicalelang,
+    this.vehicalelong,
+  }) : super(key: key);
   @override
   _vehicleDetailsState createState() => _vehicleDetailsState();
 }
 
 // ignore: camel_case_types
 class _vehicleDetailsState extends State<vehicleDetails> {
+  CarouselController buttonCarouselController = CarouselController();
+
   bool selected = false;
   ScrollController _scrollController;
   Color _theme;
   bool showtext = false;
 
-
-SharedPreferences prefs;
-String token;
-getValue() async {
-  prefs = await SharedPreferences.getInstance();
-  //Return String
-  token = prefs.getString('value_key');
-  return token;
-}
-
-
-
-
-
+  String token;
+  getStringValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(token);
+    token = prefs.getString('value_key');
+  }
 
   @override
   void initState() {
+    //  getImagelink();
+    getStringValuesSF();
     super.initState();
-    getValue();
-    getCurrentLocation();
+
+    // getCurrentLocation();
     _theme = Colors.black;
 
     _scrollController = ScrollController()
@@ -74,25 +101,28 @@ getValue() async {
         _scrollController.offset > (150 - kToolbarHeight);
   }
 
-  GoogleMapController _controller;
-  Position position;
+  // GoogleMapController _controller;
+  // Position position;
   Widget _child;
 
-  void getCurrentLocation() async {
-    Position res = await Geolocator().getCurrentPosition();
-    setState(() {
-      position = res;
-      _child = mapWidget();
-    });
-  }
+  // void getCurrentLocation() async {
+  //   Position res = await Geolocator().getCurrentPosition();
+  //   setState(() {
+  //     position = res;
+  //     _child = mapWidget();
+  //   });
+  // }
+  // double.parse('$vehicalelang');
+  // double.parse('$vehicalelong');
 
   Set<Marker> _createMarker() {
     return <Marker>[
       Marker(
-          markerId: MarkerId("Home"),
-          position: LatLng(position.latitude, position.longitude),
+          markerId: MarkerId("Vehicle Address"),
+          position: LatLng(double.parse(widget.vehicalelang),
+              double.parse(widget.vehicalelong)),
           icon: BitmapDescriptor.defaultMarker,
-          infoWindow: InfoWindow(title: "Home"))
+          infoWindow: InfoWindow(title: "Vehicle Address"))
     ].toSet();
   }
 
@@ -100,6 +130,25 @@ getValue() async {
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
+
+    List<String> imageLinks = [
+      'https://ajerrha.com/vehicles/' +
+          widget.vehicleid.toString() +
+          '/' +
+          widget.vehicle1.toString(),
+      'https://ajerrha.com/vehicles/' +
+          widget.vehicleid.toString() +
+          '/' +
+          widget.vehicle2.toString(),
+      'https://ajerrha.com/vehicles/' +
+          widget.vehicleid.toString() +
+          '/' +
+          widget.vehicle3.toString(),
+      'https://ajerrha.com/vehicles/' +
+          widget.vehicleid.toString() +
+          '/' +
+          widget.vehicle4.toString(),
+    ];
     return Scaffold(
       body: NestedScrollView(
           // controller: _scrollController,
@@ -144,7 +193,7 @@ getValue() async {
                     children: <Widget>[
                       Row(
                         children: [
-                          Text('Range Rover - White ',
+                          Text(widget.vehiclename,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -240,7 +289,73 @@ getValue() async {
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
                           width: double.infinity,
-                          child: DetailCoursel(),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                CarouselSlider(
+                                  options: CarouselOptions(
+                                    height: 200.0,
+                                    aspectRatio: 16 / 9,
+                                    viewportFraction: 1,
+                                  ),
+                                  carouselController: buttonCarouselController,
+                                  items: imageLinks.map((imageLink) {
+                                    return Builder(
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 5.0),
+                                            child: Image.network(
+                                              imageLink,
+                                              fit: BoxFit.cover,
+                                            ));
+                                      },
+                                    );
+                                  }).toList(),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                CarouselSlider(
+                                  options: CarouselOptions(
+                                    height: 60.0,
+                                    autoPlay: false,
+                                    aspectRatio: 16 / 9,
+                                    enableInfiniteScroll: true,
+                                    viewportFraction: 0.3,
+                                  ),
+                                  items: imageLinks.map((imageLink) {
+                                    return Builder(
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 5.0),
+                                            child: InkWell(
+                                              child: Image.network(
+                                                imageLink,
+                                                fit: BoxFit.cover,
+                                              ),
+                                              onTap: () {
+                                                print(imageLinks
+                                                    .indexOf(imageLink));
+                                                setState(() {
+                                                  buttonCarouselController
+                                                      .jumpToPage(imageLinks
+                                                          .indexOf(imageLink));
+                                                });
+                                              },
+                                            ));
+                                      },
+                                    );
+                                  }).toList(),
+                                )
+                              ]),
                         ),
                       ),
                       SizedBox(
@@ -252,7 +367,8 @@ getValue() async {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '600 SAR',
+                              widget.vehiclerate + " SAR",
+                              // '600 SAR',
                               textScaleFactor: 1.2,
                               style: TextStyle(
                                   color: Colors.black.withOpacity(0.84),
@@ -260,23 +376,16 @@ getValue() async {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              AppLocalizations.of(context).translate(
-                                'mileage',
-                              ),
+                              "Mileage " + widget.vehiclemilage,
+                              // AppLocalizations.of(context).translate(
+                              //   'mileage',
+                              // ),
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Tajawal',
                                   color: Colors.black),
                             ),
-                            // Text(
-                            //   'Mileage 123',
-                            //   textScaleFactor: 1.2,
-                            //   style: TextStyle(
-                            //       color: Colors.black,
-                            //       fontSize: 16,
-                            //       fontWeight: FontWeight.bold),
-                            // )
                           ],
                         ),
                       ),
@@ -295,14 +404,6 @@ getValue() async {
                               fontFamily: 'Tajawal',
                               color: Colors.grey),
                         ),
-                        //  Text(
-                        //   'cd_200km',
-                        //   textScaleFactor: 1.2,
-                        //   style: TextStyle(
-                        //       color: Colors.black.withOpacity(0.50),
-                        //       fontWeight: FontWeight.w600,
-                        //       fontSize: 10),
-                        // ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
@@ -316,22 +417,18 @@ getValue() async {
                       Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         child: Text(
-                          AppLocalizations.of(context).translate(
-                            'Insurance',
-                          ),
+                          "Insurance Expired Date  " +
+                              widget.vehicleinsurance
+                                  .toString()
+                                  .substring(0, 10),
+                          // AppLocalizations.of(context).translate(
+                          //   'Insurance',
+                          // ),
                           style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.normal,
                               fontFamily: 'Tajawal'),
                         ),
-                        //  Text(
-                        //   'Insurance expired date 11 - 11 - 2021',
-                        //   textScaleFactor: 1.2,
-                        //   style: TextStyle(
-                        //       color: Colors.black.withOpacity(0.54),
-                        //       fontWeight: FontWeight.w600,
-                        //       fontSize: 14),
-                        // ),
                       ),
                       SizedBox(
                         height: 0.038 * _height,
@@ -340,17 +437,18 @@ getValue() async {
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         child: Container(
                           height: _height / 4,
-                          child: _child,
-
-                          // decoration: BoxDecoration(
-                          //     borderRadius:
-                          //         BorderRadius.all(Radius.circular(5))),
-                          // height: 0.114 * _height,
-                          // width: double.infinity,
-                          // child: FittedBox(
-                          //   child: Image.asset('assets/images/map.png'),
-                          //   fit: BoxFit.fill,
-                          // ),
+                          child: GoogleMap(
+                            mapType: MapType.normal,
+                            markers: _createMarker(),
+                            initialCameraPosition: CameraPosition(
+                              target: LatLng(double.parse(widget.vehicalelang),
+                                  double.parse(widget.vehicalelong)),
+                              zoom: 15.0,
+                            ),
+                            // onMapCreated: (GoogleMapController controller) {
+                            //   _controller = controller;
+                            // },
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -359,21 +457,15 @@ getValue() async {
                       Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         child: Text(
-                          AppLocalizations.of(context).translate(
-                            'Map_text',
-                          ),
+                          widget.vehicledescprition,
+                          // AppLocalizations.of(context).translate(
+                          //   'Map_text',
+                          // ),
                           style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.normal,
                               fontFamily: 'Tajawal'),
                         ),
-                        // Text(
-                        //   'Lexus LS car specifications, clean, new and appropriate for private parties, enjoy driving and spending nice time.',
-                        //   textScaleFactor: 1.2,
-                        //   style: TextStyle(
-                        //       color: Colors.black.withOpacity(0.54),
-                        //       fontSize: 12),
-                        // ),
                       ),
                       SizedBox(
                         height: 0.015 * _height,
@@ -393,14 +485,6 @@ getValue() async {
                                   fontWeight: FontWeight.normal,
                                   fontFamily: 'Tajawal'),
                             ),
-                            // Text(
-                            //   'cd_booking_date',
-                            //   textScaleFactor: 1.2,
-                            //   style: TextStyle(
-                            //       color: Colors.black,
-                            //       fontWeight: FontWeight.bold,
-                            //       fontSize: 16),
-                            // ),
                             Spacer(),
                             Container(
                               width: 0.133 * _width,
@@ -424,15 +508,6 @@ getValue() async {
                                   fontWeight: FontWeight.normal,
                                   fontFamily: 'Tajawal'),
                             ),
-
-                            // Text(
-                            //   'cd_sar',
-                            //   textScaleFactor: 1.2,
-                            //   style: TextStyle(
-                            //       color: Colors.black,
-                            //       fontWeight: FontWeight.bold,
-                            //       fontSize: 18),
-                            // ),
                           ],
                         ),
                       ),
@@ -465,14 +540,6 @@ getValue() async {
                                           fontWeight: FontWeight.normal,
                                           fontFamily: 'Tajawal'),
                                     ),
-                                    // Text(
-                                    //   'cd_date_time',
-                                    //   textScaleFactor: 1.2,
-                                    //   style: TextStyle(
-                                    //       color: Colors.black.withOpacity(0.35),
-                                    //       fontSize: 14,
-                                    //       fontWeight: FontWeight.w600),
-                                    // ),
                                     SizedBox(
                                       height: 10,
                                     ),
@@ -490,15 +557,6 @@ getValue() async {
                                               fontWeight: FontWeight.normal,
                                               fontFamily: 'Tajawal'),
                                         ),
-                                        // Text(
-                                        //   'cd_choose_date_time',
-                                        //   textScaleFactor: 1.2,
-                                        //   style: TextStyle(
-                                        //       color: Colors.black
-                                        //           .withOpacity(0.75),
-                                        //       fontWeight: FontWeight.bold,
-                                        //       fontSize: 18),
-                                        // ),
                                         Image.asset(
                                           'assets/images/ic-calendar.png',
                                           width: 20,
@@ -538,44 +596,38 @@ getValue() async {
                         }),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: 
-                        //selected? 
-                        RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          onPressed: () =>token==""? Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginUi(),
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child:
+                              //selected?
+                              RaisedButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
                             ),
-                          ): Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Booking(),
+                            onPressed: () {
+                              selected
+                                  ? token == ""
+                                      ? Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => LoginUi(),
+                                          ),
+                                        )
+                                      : showAlertDialogconfirmBook(context)
+                                  : showAlertDialogtermcheck(context);
+                            },
+                            color: Color(0xFF042E6F),
+                            padding: EdgeInsets.all(16.0),
+                            textColor: Colors.white,
+                            child: Text(
+                              AppLocalizations.of(context).translate(
+                                'cd_book_now',
+                              ),
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Tajawal'),
                             ),
-                          ),
-                          color: Color(0xFF042E6F),
-                          padding: EdgeInsets.all(16.0),
-                          textColor: Colors.white,
-                          child: Text(
-                            AppLocalizations.of(context).translate(
-                              'cd_book_now',
-                            ),
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Tajawal'),
-                          ),
-                          // Text("cd_book_now",
-                          //     textScaleFactor: 1.2,
-                          //     style: TextStyle(
-                          //         fontSize: 18, fontWeight: FontWeight.bold)),
-                        )
-                        // : 
-                        // showAlertDialogtermcheck(context),
-                      ),
+                          )),
                       SizedBox(
                         height: 0.035 * _height,
                       ),
@@ -588,25 +640,59 @@ getValue() async {
     );
   }
 
-  Widget mapWidget() {
-    return GoogleMap(
-      mapType: MapType.normal,
-      markers: _createMarker(),
-      initialCameraPosition: CameraPosition(
-        target: LatLng(position.latitude, position.longitude),
-        zoom: 15.0,
-      ),
-      onMapCreated: (GoogleMapController controller) {
-        _controller = controller;
+  // Widget mapWidget() {
+  //   return GoogleMap(
+  //     mapType: MapType.normal,
+  //     markers: _createMarker(),
+  //     initialCameraPosition: CameraPosition(
+  //       target: LatLng(widget.vehicalelang, widget.vehicalelong),
+  //       zoom: 15.0,
+  //     ),
+  //     // onMapCreated: (GoogleMapController controller) {
+  //     //   _controller = controller;
+  //     // },
+  //   );
+  // }
+
+  showAlertDialogtermcheck(BuildContext context) {
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Please Tick Valid Driver Licenses"),
+      content: Text("Have a Good Day"),
+      actions: [
+        new FlatButton(
+          onPressed: () {
+            // dismisses only the dialog and returns nothing
+            Navigator.pop(context);
+          },
+          child: new Text('OK'),
+        ),
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
       },
     );
   }
-   showAlertDialogtermcheck(BuildContext context) {
+
+  showAlertDialogconfirmBook(BuildContext context) {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("SuccessFull"),
-      content: Text("Have a Good Day"),
+      title: Text("Your request has been submitted !"),
+      content: Text("You can Track it on My Bookings"),
       actions: [
+        new FlatButton(
+          onPressed: () {
+            // dismisses only the dialog and returns nothing
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          child: new Text('OK'),
+        ),
       ],
     );
 

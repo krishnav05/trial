@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:Ajreeha/localization/App_localization.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:Ajreeha/login/userform.dart';
+import 'package:Ajreeha/login/userformnew.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
@@ -20,6 +20,7 @@ class _LoginUiState extends State<LoginUi> {
   var token = '';
   bool isLogin = false;
   bool validate = false;
+  bool isLoding = false;
   final form = new GlobalKey<FormState>();
   final TextEditingController mobilecontoller = TextEditingController();
   final TextEditingController passwordcontoller = TextEditingController();
@@ -238,6 +239,10 @@ class _LoginUiState extends State<LoginUi> {
                           ),
                           onPressed: () async {
                             if (form.currentState.validate()) {
+                              setState(() {
+                                isLoding = true;
+                                print(isLoding);
+                              });
                               http.post(
                                 'https://ajerrha.com/api/sanctum/token',
                                 body: jsonEncode({
@@ -249,26 +254,28 @@ class _LoginUiState extends State<LoginUi> {
                               ).then((response) async {
                                 var preferences = await SharedPreferences
                                     .getInstance(); // Save a value
-                                
-                                    final res =json.decode(response.body);// Retrieve value later
-                                     preferences.setString('value_key', res["token"]);
 
-                                    print(res["token"]);
-                                    print(res["status"]);
+                                final res = json.decode(
+                                    response.body); // Retrieve value later
+                                preferences.setString(
+                                    'value_key', res["token"]);
+                                preferences.setString('UserName', res["name"]);
+
+                                print(res["token"]);
+                                print(res["status"]);
 
                                 if (res["status"] == "success") {
                                   isLogin = true;
-
                                   showAlertDialogloginsucessfull(context);
-                                  Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => FirstHome()),
-            (Route<dynamic> route) => false,
-      );
-                                //  Navigator.pop(context);
+
+                                  //  Navigator.pop(context);
                                 } else {
+                                  setState(() {
+                                    isLoding = false;
+                                  });
                                   isLogin = false;
-                                   showAlertDialogloginnotsucessfull(context);
+
+                                  showAlertDialogloginnotsucessfull(context);
                                 }
                               });
                             }
@@ -278,16 +285,18 @@ class _LoginUiState extends State<LoginUi> {
                             ResponsiveFlutter.of(context).wp(4),
                           ),
                           textColor: Colors.white,
-                          child: Text(
-                            AppLocalizations.of(context).translate(
-                              'Login',
-                            ),
-                            style: TextStyle(
-                                fontSize:
-                                    ResponsiveFlutter.of(context).fontSize(2.5),
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Tajawal'),
-                          ),
+                          child: isLoding
+                              ? CircularProgressIndicator()
+                              : Text(
+                                  AppLocalizations.of(context).translate(
+                                    'Login',
+                                  ),
+                                  style: TextStyle(
+                                      fontSize: ResponsiveFlutter.of(context)
+                                          .fontSize(2.5),
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Tajawal'),
+                                ),
                         ),
                       ),
                     ),
@@ -330,47 +339,52 @@ class _LoginUiState extends State<LoginUi> {
       ),
     );
   }
+
   showAlertDialogloginsucessfull(BuildContext context) {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("SuccessFull"),
       content: Text("Have a Good Day"),
       actions: [
-          new FlatButton(
-            onPressed: () {
-              
-              // dismisses only the dialog and returns nothing
-             },
-            child: new Text('OK'),
-          ),
+        new FlatButton(
+          onPressed: () {
+            // dismisses only the dialog and returns nothing
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => FirstHome()),
+              (Route<dynamic> route) => false,
+            );
+          },
+          child: new Text('OK'),
+        ),
       ],
     );
 
     // show the dialog
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
-        return alert;
+        return WillPopScope(onWillPop: () async => false, child: alert);
       },
     );
   }
-  
+
   showAlertDialogloginnotsucessfull(BuildContext context) {
     // set up the AlertDialog
-    
+
     AlertDialog alert = AlertDialog(
       title: Text("Not Login "),
       content: Text("Something Wrong"),
       actions: [
-         new FlatButton(
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true)
-                  .pop(); // dismisses only the dialog and returns nothing
-             },
-            child: new Text('OK'),
-          ),
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true)
+                .pop(); // dismisses only the dialog and returns nothing
+          },
+          child: new Text('OK'),
+        ),
       ],
-      
     );
 
     // show the dialog
@@ -380,7 +394,6 @@ class _LoginUiState extends State<LoginUi> {
         return alert;
       },
     );
-                                  sleep(const Duration(seconds: 2));
-
+    // sleep(const Duration(seconds: 2));
   }
 }

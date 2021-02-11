@@ -1,4 +1,4 @@
-import 'package:Ajreeha/Drawer%20screen/myvehicles.dart';
+import 'package:Ajreeha/MyVehicle/MyVehiclecards.dart';
 import 'package:Ajreeha/localization/App_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,48 +13,125 @@ import 'package:image_picker/image_picker.dart';
 import 'package:Ajreeha/MyVehicle/repositary.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'MyVehiclecards.dart';
 
-class Vehicleform extends StatefulWidget {
+class EditmyCar extends StatefulWidget {
+  final String vehicaleid;
+  // // final String vid;
+  // const  EditmyCar(this.vehicaleid);
+  EditmyCar({Key key, this.vehicaleid}) : super(key: key);
   @override
-  _VehicleformState createState() => _VehicleformState();
+  _EditmyCarState createState() => _EditmyCarState();
 }
 
-class _VehicleformState extends State<Vehicleform> {
+class _EditmyCarState extends State<EditmyCar> {
 /*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
 
-  final GlobalKey<FormState> _form = GlobalKey<FormState>();
+  GlobalKey<FormState> _form = GlobalKey<FormState>();
   TextEditingController colorcontroller = TextEditingController();
-  final TextEditingController rentcontroller = TextEditingController();
-  final TextEditingController descriptioncontroller = TextEditingController();
-  final TextEditingController insuranceexpirycontroller =
-      TextEditingController();
-  final TextEditingController mileagecontroller = TextEditingController();
-  final TextEditingController conditioncontroller = TextEditingController();
+  TextEditingController rentcontroller = TextEditingController();
+  TextEditingController descriptioncontroller = TextEditingController();
+  TextEditingController insuranceexpirycontroller = TextEditingController();
+  TextEditingController mileagecontroller = TextEditingController();
+  TextEditingController conditioncontroller = TextEditingController();
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
 
-  final TextEditingController middleRightSidecontroller =
-      TextEditingController();
-  final TextEditingController backRightSidecontroller = TextEditingController();
-  final TextEditingController frontRightSidecontroller =
-      TextEditingController();
+  TextEditingController middleRightSidecontroller = TextEditingController();
+  TextEditingController backRightSidecontroller = TextEditingController();
+  TextEditingController frontRightSidecontroller = TextEditingController();
 
-  final TextEditingController middleLeftSidecontroller =
-      TextEditingController();
-  final TextEditingController backLeftSidecontroller = TextEditingController();
-  final TextEditingController frontLeftSidecontroller = TextEditingController();
+  TextEditingController middleLeftSidecontroller = TextEditingController();
+  TextEditingController backLeftSidecontroller = TextEditingController();
+  TextEditingController frontLeftSidecontroller = TextEditingController();
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
+  bool isloding = false;
 /*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
   String value_keytoken;
   getStringValuesSF() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //Return String
-
     value_keytoken = prefs.getString('value_key');
     // isregister = register.isNotEmpty; //verify gives true only
+    print(value_keytoken);
+    getdata();
+  }
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
+
+  getdata() async {
+    print("getdata" + value_keytoken);
+    print("id" + widget.vehicaleid);
+    await http.post(
+      'https://ajerrha.com/api/fetch/vehicle/details',
+      body: jsonEncode({
+        "vehicaleid": widget.vehicaleid.toString(),
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + value_keytoken
+      },
+    ).then((response) async {
+      var res = json.decode(response.body);
+      // print(res['status']);
+      // print(res['data'][0]);
+      var data = Job.fromJson(res['data'][0]);
+
+      // print("${data.id}");
+      // print("${data.vehicleColor}");
+
+      if (res["status"] == "success") {
+        setState(() {
+          colorcontroller.text = data.vehicleColor;
+          rentcontroller.text = data.vehicleRentPerDay;
+          descriptioncontroller.text = data.vehicleDescription;
+          insuranceexpirycontroller.text =
+              data.vehicleInsuranceExpireDate.toString().substring(0, 10);
+          mileagecontroller.text = data.vehicleMileage;
+
+          conditioncontroller.text = data.vehicleCondition;
+
+          // vehicaletype = data.vehicleType;
+          // vehicalemodel = data.vehicleModel;
+          vehicaleyear = data.vehicleYear;
+          vehicaledoor = data.vehicleDoor;
+          vehicaleseat = data.vehicleSeatCapacity;
+
+          //_image1=
+
+          // photopath101 = data.frontRightSideImage;
+          // photopath20 = data.frontLeftSideImage;
+          // photopath30 = data.middleLeftSideImage;
+          // photopath40 = data.middleLeftSideImage;
+          // photopath50 = data.backRightSideImage;
+          // photopath60 = data.backLeftSideImage;
+          // photopath70 = data.image1;
+          // photopath80 = data.image2;
+          // photopath90 = data.image3;
+          // photopath100 = data.image4;
+
+          middleRightSidecontroller.text = data.middleRightSideText;
+          backRightSidecontroller.text = data.backRightSideText;
+          frontRightSidecontroller.text = data.frontRightSideText;
+          middleLeftSidecontroller.text = data.middleLeftSideText;
+          backLeftSidecontroller.text = data.backLeftSideText;
+          frontLeftSidecontroller.text = data.frontLeftSideText;
+
+          // latitudeorginal = data.latitude;
+          // longnitudeoriginal = data.longitude;
+          selected1 = data.frontLeftSideTick == "1" ? true : false;
+          selected2 = data.frontRightSideTick == "1" ? true : false;
+          selected3 = data.middleLeftSideTick == "1" ? true : false;
+          selected4 = data.middleRightSideTick == "1" ? true : false;
+          selected5 = data.backLeftSideTick == "1" ? true : false;
+          selected6 = data.backRightSideTick == "1" ? true : false;
+        });
+      }
+    });
   }
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
@@ -66,6 +143,8 @@ class _VehicleformState extends State<Vehicleform> {
     getCurrentLocation();
     _states = List.from(_states)..addAll(repo.getStates());
     getStringValuesSF();
+    getdata();
+
     super.initState();
   }
 
@@ -91,7 +170,7 @@ class _VehicleformState extends State<Vehicleform> {
   String _selectedLGA = "Choose ..";
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
-  bool isloding = false;
+
 /*--------------------------------------------------------------------------------------------------------------------------------------------- -------------------*/
   // for dialogbox makes statefull widget
   StateSetter _setState;
@@ -170,7 +249,10 @@ class _VehicleformState extends State<Vehicleform> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text("Add Vehicle",
+        title: Text(
+            AppLocalizations.of(context).translate(
+              'EditVehicle',
+            ),
             style:
                 TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2))),
         flexibleSpace: Container(
@@ -294,7 +376,7 @@ class _VehicleformState extends State<Vehicleform> {
                         },
                         decoration: InputDecoration(
                             border: OutlineInputBorder(),
-                            labelText: 'Vehicle Color',
+                            labelText: 'Vehicale Color',
                             hintText: 'Red'),
                       )),
                   Padding(
@@ -669,7 +751,7 @@ class _VehicleformState extends State<Vehicleform> {
                         ),
 
                         Text(
-                          "Upload Vehicle images",
+                          "Upload Vehicale images",
                           style: TextStyle(
                               fontSize: 20,
                               fontFamily: 'Tajawal',
@@ -857,9 +939,11 @@ class _VehicleformState extends State<Vehicleform> {
                                 setState(() {
                                   isloding = true;
                                 });
+
                                 http.post(
                                   'https://ajerrha.com/api/create/vehicle',
                                   body: jsonEncode({
+                                    //  "vehicaleid": widget.vehicaleid,
                                     "vehicaleType": _selectedState,
                                     "vehicaleModel": _selectedLGA,
                                     "vehicaleYear": vehicaleyear,
@@ -945,21 +1029,11 @@ class _VehicleformState extends State<Vehicleform> {
                                   final res = json.decode(response.body);
                                   if (res["status"] == "success") {
                                     print(response.body);
-
-                                    // Navigator.pushAndRemoveUntil(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //       builder: (_) => Myvehiclecards()),
-                                    //   (Route<dynamic> route) => false,
-
-                                    // );
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-
-                                    Navigator.push(
+                                    Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => MyVehicles()),
+                                          builder: (_) => Myvehiclecards()),
+                                      (Route<dynamic> route) => false,
                                     );
                                   } else {
                                     setState(() {
@@ -980,9 +1054,10 @@ class _VehicleformState extends State<Vehicleform> {
                             padding: EdgeInsets.all(16.0),
                             textColor: Colors.white,
                             child: Text(
-                              AppLocalizations.of(context).translate(
-                                'Add vehicle',
-                              ),
+                              "Save Changes",
+                              // AppLocalizations.of(context).translate(
+                              //   'EditVehicle',
+                              // ),
                               style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,

@@ -22,12 +22,13 @@ class _DrawersState extends State<Drawers> {
   bool tokencheck = false;
   String tokenchec;
   SharedPreferences prefs;
-
+  String userNamelogin;
   getStringValuesSF() async {
     prefs = await SharedPreferences.getInstance();
     //Return String
-print(tokenchec);
+    print(tokenchec);
     tokenchec = prefs.getString('value_key');
+    userNamelogin = prefs.getString('UserName');
 
     if (tokenchec == "") {
       print("null" + tokenchec);
@@ -42,6 +43,7 @@ print(tokenchec);
     }
 
     print("drawer" + tokenchec);
+    print(userNamelogin);
   }
 
   @override
@@ -72,9 +74,10 @@ print(tokenchec);
                 ),
                 tokencheck
                     ? Text(
-                        AppLocalizations.of(context).translate(
-                          'cname',
-                        ),
+                        userNamelogin,
+                        // AppLocalizations.of(context).translate(
+                        //   'cname',
+                        // ),
                         textScaleFactor: 1,
                         style: TextStyle(
                             fontSize: ResponsiveFlutter.of(context).wp(6),
@@ -302,12 +305,14 @@ print(tokenchec);
                           setState(() {
                             getStringValuesSF();
                             prefs.setString('value_key', "");
+                            prefs.setString('name', "");
+
                             tokencheck = false;
                           });
                           //  setState(() {
                           //   getStringValuesSF();
                           //   prefs.setString('otpverify', "");
-                            
+
                           // });
                         }
                         Navigator.pop(context);
